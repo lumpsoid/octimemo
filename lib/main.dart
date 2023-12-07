@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         title: 'Simple Memos',
         theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.green),
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.green[50]!),
           useMaterial3: true,
         ),
         home: MemosScreen(),
@@ -39,43 +39,53 @@ class MemosScreen extends StatelessWidget {
         title: const Text('Memos'),
       ),
       body: SafeArea(
-        child: Selector<NoteManager, int?>(
-          selector: (context, manager) => manager.itemCount,
-          builder: (context, itemCount, child) => ListView.builder(
-            padding: const EdgeInsets.only(bottom: 64.0),
-            itemCount: itemCount,
-            itemBuilder: (context, index) {
-              NoteManager manager = Provider.of<NoteManager>(context);
-              final note = manager.getByIndex(index);
+        child: Column(
+          children: [
+            Expanded(
+              child: Selector<NoteManager, int?>(
+                selector: (context, manager) => manager.itemCount,
+                builder: (context, itemCount, child) => ListView.builder(
+                  // padding: const EdgeInsets.only(bottom: 64.0),
+                  itemCount: itemCount,
+                  itemBuilder: (context, index) {
+                    NoteManager manager = Provider.of<NoteManager>(context);
+                    final note = manager.getByIndex(index);
 
-              // Use a different approach to create NoteCard based on note state
-              if (note.isLoading) {
-                return const NoteCardLoading();
-              } else {
-                return NoteCard(note: note, index: index);
-              }
-            },
-          ),
-        ),
-      ),
-      bottomSheet: TextFormField(
-        controller: _noteController,
-        maxLines: null,
-        // Add your input field properties and functionality here
-        decoration: InputDecoration(
-          hintText: 'Enter your note...',
-          border: const OutlineInputBorder(),
-          suffixIcon: IconButton(
-              onPressed: () async {
-                String body = _noteController.text;
-                if (body.isNotEmpty) {
-                  NoteManager manager = context.read<NoteManager>();
-                  await manager.addNote(body);
-                  _noteController.clear();
-                }
-              },
-              icon: const Icon(Icons.arrow_circle_right)
-          ),
+                    // Use a different approach to create NoteCard based on note state
+                    if (note.isLoading) {
+                      return const NoteCardLoading();
+                    } else {
+                      return NoteCard(note: note, index: index);
+                    }
+                  },
+                ),
+              ),
+            ),
+            Container(
+              // padding: const EdgeInsets.all(8.0),
+              color: Colors.green[50],
+              child: TextFormField(
+                controller: _noteController,
+                maxLines: null,
+                // Add your input field properties and functionality here
+                decoration: InputDecoration(
+                  hintText: 'Enter your note...',
+                  border: const OutlineInputBorder(),
+                  suffixIcon: IconButton(
+                      onPressed: () async {
+                        String body = _noteController.text;
+                        if (body.isNotEmpty) {
+                          NoteManager manager = context.read<NoteManager>();
+                          await manager.addNote(body);
+                          _noteController.clear();
+                        }
+                      },
+                      icon: const Icon(Icons.arrow_circle_right)
+                  ),
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );
