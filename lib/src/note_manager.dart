@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:simple_memos/src/db_helper.dart';
+import 'db_helper.dart';
 
 import 'note.dart' show Note;
 import 'page.dart' show NotePage, itemsPerPage;
@@ -15,7 +15,6 @@ class NoteManager extends ChangeNotifier {
 
   @override
   void dispose() {
-    print('was disposed');
     _isDisposed = true;
     super.dispose();
   }

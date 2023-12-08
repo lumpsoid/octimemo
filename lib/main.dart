@@ -45,13 +45,11 @@ class MemosScreen extends StatelessWidget {
               child: Selector<NoteManager, int?>(
                 selector: (context, manager) => manager.itemCount,
                 builder: (context, itemCount, child) => ListView.builder(
-                  // padding: const EdgeInsets.only(bottom: 64.0),
                   itemCount: itemCount,
                   itemBuilder: (context, index) {
                     NoteManager manager = Provider.of<NoteManager>(context);
                     final note = manager.getByIndex(index);
 
-                    // Use a different approach to create NoteCard based on note state
                     if (note.isLoading) {
                       return const NoteCardLoading();
                     } else {
@@ -62,7 +60,6 @@ class MemosScreen extends StatelessWidget {
               ),
             ),
             Container(
-              // padding: const EdgeInsets.all(8.0),
               color: Colors.green[50],
               child: TextFormField(
                 controller: _noteController,
@@ -80,8 +77,7 @@ class MemosScreen extends StatelessWidget {
                           _noteController.clear();
                         }
                       },
-                      icon: const Icon(Icons.arrow_circle_right)
-                  ),
+                      icon: const Icon(Icons.arrow_circle_right)),
                 ),
               ),
             ),
