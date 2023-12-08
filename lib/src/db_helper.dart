@@ -10,9 +10,9 @@ class DbHelper {
 
   static bool isConnected = false;
   static late Database _db;
-  static late int noteCount;
+  late int noteCount;
 
-
+  // there is a problem with multiple async intialization of db
   Future<Database> get db async {
     if (isConnected) {
       return _db;
@@ -28,7 +28,7 @@ class DbHelper {
       String databasesPath = await getDatabasesPath();
       String path = join(databasesPath, 'notes.db');
       Database db = await openDatabase(path, version: 1, onCreate: _onCreate);
-      noteCount = await _getCount(db);
+      noteCount = await getCount(db);
       isConnected = true;
       return db;
     } catch (e) {
@@ -38,12 +38,6 @@ class DbHelper {
   }
 
   void _onCreate(Database db, int version) async {
-    // books-meta
-    //// id name author percent date-created date-completed date-last
-    // books-text
-    //// id text
-
-    // Create books_meta table
     await db.execute('''
       CREATE TABLE notes (
         id INTEGER PRIMARY KEY,
@@ -52,15 +46,27 @@ class DbHelper {
         date_modified TEXT
       )
     ''');
+    db.insert(
+        "notes",
+        await Note(
+                body:
+                    'text input field at the bottom will be always there for you')
+            .toMap());
+    db.insert("notes",
+        await Note(body: 'to delete this note, swipte it to the left').toMap());
+    db.insert("notes",
+        await Note(body: 'to edit this note, swipe it to the rigth').toMap());
+    db.insert("notes", await Note(body: 'and you good to go').toMap());
   }
 
   // CRUD operations
-  Future<int> _getCount(Database db) async {
-    int? count = Sqflite.firstIntValue(await db.rawQuery('SELECT COUNT(*) FROM notes'));
+  Future<int> getCount(Database db) async {
+    int? count =
+        Sqflite.firstIntValue(await db.rawQuery('SELECT COUNT(*) FROM notes'));
     if (count == null) {
       throw StateError('why count is null?');
     }
-    return count - 1;
+    return count > 0 ? count - 1 : 0;
   }
 
   Future<int> insertNote(Note note) async {
@@ -83,11 +89,11 @@ class DbHelper {
       items: List.generate(
         result.length,
         (index) => Note(
-            id: result[index]['id'],
-            body: result[index]['body'],
-            dateCreated: result[index]['date_created'],
-            dateModified: result[index]['date_modified'],
-          ),
+          id: result[index]['id'],
+          body: result[index]['body'],
+          dateCreated: result[index]['date_created'],
+          dateModified: result[index]['date_modified'],
+        ),
       ),
       startingIndex: startingIndex,
       hasNext: startingIndex + itemsPerPage < noteCount,
@@ -102,19 +108,18 @@ class DbHelper {
 
   Future<List<Map<String, dynamic>>> getIds() async {
     Database dbClient = await db;
-    return await dbClient.query('notes', columns: ['id']);;
+    return await dbClient.query('notes', columns: ['id']);
   }
 
   Future<int> updateNote(Map<String, dynamic> note) async {
     Database dbClient = await db;
-    return await dbClient.update('notes', note,
-        where: 'id = ?', whereArgs: [note['id']]);
+    return await dbClient
+        .update('notes', note, where: 'id = ?', whereArgs: [note['id']]);
   }
 
   Future<int> deleteNote(int id) async {
     Database dbClient = await db;
-    return await dbClient.delete('notes',
-        where: 'id = ?', whereArgs: [id]);
+    return await dbClient.delete('notes', where: 'id = ?', whereArgs: [id]);
   }
 
   Future<void> close() async {
@@ -122,7 +127,7 @@ class DbHelper {
     try {
       await dbClient.close();
       isConnected = false;
-    } catch(e) {
+    } catch (e) {
       print(e);
       rethrow;
     }
