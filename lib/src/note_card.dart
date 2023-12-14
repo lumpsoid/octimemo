@@ -7,9 +7,8 @@ import 'package:flutter/material.dart';
 class NoteCard extends StatelessWidget {
   final int index;
   final Note note;
-  final int id;
 
-  NoteCard({required this.note, required this.index, super.key}) : id = note.id;
+  const NoteCard({required this.note, required this.index, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +29,11 @@ class NoteCard extends StatelessWidget {
         ),
         confirmDismiss: (DismissDirection direction) async {
           if (direction == DismissDirection.startToEnd) {
-            await _showEditDialog(context, index);
+            NoteManager manager = context.read<NoteManager>();
+            if (manager.editingIndex != null) {
+              return false;
+            }
+            manager.startEditing(index);
             return false;
           }
           // delete
@@ -40,8 +43,9 @@ class NoteCard extends StatelessWidget {
           return false;
         },
         onDismissed: (DismissDirection direction) async {
-          String action = '';
-          NoteManager manager = Provider.of<NoteManager>(context, listen: false);
+          String message = '';
+          NoteManager manager =
+              Provider.of<NoteManager>(context, listen: false);
           // edit
           // if (direction == DismissDirection.startToEnd) {
           //   action = 'edited';
@@ -49,108 +53,47 @@ class NoteCard extends StatelessWidget {
           // }
           // delete
           if (direction == DismissDirection.endToStart) {
-            await manager.deleteNote(index);
-            action = 'deleted';
+            await manager.deleteNote(note);
+            message = 'Memo was deleted';
           }
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text("Memo was $action", style: const TextStyle(fontSize: 16.0)),
-              duration: const Duration(seconds: 2),
-            )
-          );
+          _showSnackBar(manager, context, message);
         },
-        key: Key(id.toString()),
+        key: Key(note.id.toString()),
         child: Container(
-          margin: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 16.0),
-          padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
-          child: Text(
-            note.body,
-            style: const TextStyle(fontSize: 16.0)
-          ),
-        )
-    );
+            margin: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 16.0),
+            padding:
+                const EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
+            child: _buildDisplayCard()));
   }
 
-  Future<void> _showEditDialog(BuildContext context, int index) async {
-    final NoteManager manager = Provider.of<NoteManager>(context, listen: false);
-    Note note = manager.getByIndex(index);
-    String newBody = '';
-
-    await showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Edit Item'),
-          content: TextFormField(
-            initialValue: note.body,
-            onChanged: (value) {
-              newBody = value;
-            },
-          ),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: const Text('Cancel'),
-            ),
-            TextButton(
-              onPressed: () async {
-                if (newBody.isNotEmpty) {
-                  // Update the item in the list
-                  await manager.editNote(index, newBody);
-                }
-                Navigator.of(context).pop();
-              },
-              child: const Text('Save'),
-            ),
-          ],
-        );
-      },
-    );
+  Future<void> _showSnackBar(
+      NoteManager manager, BuildContext context, String message) async {
+    if (manager.isSnackbarVisible) {
+      return;
+    }
+    manager.isSnackbarVisible = true;
+    ScaffoldMessenger.of(context)
+        .showSnackBar(SnackBar(
+          content: Text(message, style: const TextStyle(fontSize: 16.0)),
+          duration: const Duration(seconds: 2),
+        ))
+        .closed
+        .then((value) => manager.isSnackbarVisible = false);
   }
-}
 
-class CardTest extends StatelessWidget {
-  const CardTest({
-    super.key,
-    required this.note,
-  });
-
-  final Note note;
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      margin: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 16.0),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
-        child: Text(
-          note.body,
-          style: const TextStyle(fontSize: 16.0),
-        ),
-      ),
-    );
+  Widget _buildDisplayCard() {
+    return Text(note.body!, style: const TextStyle(fontSize: 16.0));
   }
 }
 
 class NoteCardLoading extends StatelessWidget {
-
   const NoteCardLoading({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return const Card(
-      margin: EdgeInsets.all(16.0),
-      child: Padding(
-        padding: EdgeInsets.all(16.0),
-        child: Text(
-          '...',
-          style: TextStyle(fontSize: 16.0),
-        ),
-      ),
-    );
+    return Container(
+        margin: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 16.0),
+        padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
+        child: const Text('...', style: TextStyle(fontSize: 16.0)));
   }
 }
-
-

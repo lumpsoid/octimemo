@@ -66,7 +66,17 @@ class DbHelper {
     if (count == null) {
       throw StateError('why count is null?');
     }
-    return count > 0 ? count - 1 : 0;
+    return count;
+  }
+
+  Future<int> getCountTest() async {
+    Database dbClient = await db;
+    int? count = Sqflite.firstIntValue(
+        await dbClient.rawQuery('SELECT COUNT(*) FROM notes'));
+    if (count == null) {
+      throw StateError('why count is null?');
+    }
+    return count;
   }
 
   Future<int> insertNote(Note note) async {
@@ -111,10 +121,10 @@ class DbHelper {
     return await dbClient.query('notes', columns: ['id']);
   }
 
-  Future<int> updateNote(Map<String, dynamic> note) async {
+  Future<int> updateNote(Note note) async {
     Database dbClient = await db;
-    return await dbClient
-        .update('notes', note, where: 'id = ?', whereArgs: [note['id']]);
+    return await dbClient.update('notes', await note.toMap(),
+        where: 'id = ?', whereArgs: [note.id]);
   }
 
   Future<int> deleteNote(int id) async {
