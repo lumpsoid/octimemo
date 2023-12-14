@@ -7,12 +7,8 @@ class NotePage {
   final int startingIndex;
   final bool hasNext;
 
-  NotePage({
-    required this.items,
-    required this.startingIndex,
-    required this.hasNext});
-
-  void addNote(Note note) {
-    items.add(note);
-  }
+  NotePage(
+      {required this.items,
+      required this.startingIndex,
+      required this.hasNext});
 }
