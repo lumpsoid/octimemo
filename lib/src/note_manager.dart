@@ -11,12 +11,14 @@ class NoteManager extends ChangeNotifier {
   final DbHelper _dbHelper;
   final LinkedList<Note> _notes = LinkedList<Note>();
   final Set<int> _notesBeingFetched = {};
-  int? itemCount;
+  int? _itemCount;
   int? editingIndex;
   bool isSnackbarVisible = false;
   static const maxCacheDistance = 100;
 
   bool _isDisposed = false;
+
+  get itemCount => _itemCount;
 
   NoteManager(this._dbHelper);
 
@@ -51,7 +53,7 @@ class NoteManager extends ChangeNotifier {
     _notesBeingFetched.remove(startingIndex);
 
     if (!page.hasNext) {
-      itemCount = startingIndex + page.items.length;
+      _itemCount = startingIndex + page.items.length;
     }
 
     if (update) {
@@ -96,30 +98,23 @@ class NoteManager extends ChangeNotifier {
         noteFromStart = noteFromStart.next!;
       }
     }
-
-    // for (final index in _notes) {
-    //   if ((key - currentStartingIndex).abs() > maxCacheDistance) {
-    //     keysToRemove.add(key);
-    //   }
-    // }
-    // for (final key in keysToRemove) {
-    //   _notes.remove(key);
-    // }
   }
 
   Future<void> addNote(String body) async {
     Note note = Note(body: body);
-    _dbHelper.insertNote(note);
+    // _notes.addFirst(note);
 
     // if its null, than ourl list is not at the end
     // than we can simple add it into the db
     // and fetch will get it later
-    if (itemCount == null) {
+    if (_itemCount == null) {
       return;
     }
+
     _notes.add(note);
-    itemCount = itemCount! + 1;
+    _itemCount = _itemCount! + 1;
     notifyListeners();
+    _dbHelper.insertNote(note);
   }
 
   Future<void> deleteNote(Note note) async {
@@ -130,8 +125,8 @@ class NoteManager extends ChangeNotifier {
     note.unlink();
     _dbHelper.deleteNote(note.id!);
 
-    if (itemCount != null) {
-      itemCount = itemCount! - 1;
+    if (_itemCount != null) {
+      _itemCount = _itemCount! - 1;
       notifyListeners();
     }
   }

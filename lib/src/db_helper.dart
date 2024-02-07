@@ -48,15 +48,13 @@ class DbHelper {
     ''');
     db.insert(
         "notes",
-        await Note(
-                body:
-                    'text input field at the bottom will be always there for you')
+        Note(body: 'text input field at the bottom will be always there for you')
             .toMap());
     db.insert("notes",
-        await Note(body: 'to delete this note, swipte it to the left').toMap());
+        Note(body: 'to delete this note, swipte it to the left').toMap());
     db.insert("notes",
-        await Note(body: 'to edit this note, swipe it to the rigth').toMap());
-    db.insert("notes", await Note(body: 'and you good to go').toMap());
+        Note(body: 'to edit this note, swipe it to the rigth').toMap());
+    db.insert("notes", Note(body: 'and you good to go').toMap());
   }
 
   // CRUD operations
@@ -81,7 +79,7 @@ class DbHelper {
 
   Future<int> insertNote(Note note) async {
     Database dbClient = await db;
-    return await dbClient.insert('notes', await note.toMap());
+    return await dbClient.insert('notes', note.toMap());
   }
 
   Future<List<Map<String, dynamic>>> getNotes() async {
@@ -123,8 +121,8 @@ class DbHelper {
 
   Future<int> updateNote(Note note) async {
     Database dbClient = await db;
-    return await dbClient.update('notes', await note.toMap(),
-        where: 'id = ?', whereArgs: [note.id]);
+    return await dbClient
+        .update('notes', note.toMap(), where: 'id = ?', whereArgs: [note.id]);
   }
 
   Future<int> deleteNote(int id) async {

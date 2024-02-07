@@ -63,7 +63,7 @@ class NoteCard extends StatelessWidget {
             margin: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 16.0),
             padding:
                 const EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
-            child: _buildDisplayCard()));
+            child: Text(note.body!, style: const TextStyle(fontSize: 16.0))));
   }
 
   Future<void> _showSnackBar(
@@ -79,10 +79,6 @@ class NoteCard extends StatelessWidget {
         ))
         .closed
         .then((value) => manager.isSnackbarVisible = false);
-  }
-
-  Widget _buildDisplayCard() {
-    return Text(note.body!, style: const TextStyle(fontSize: 16.0));
   }
 }
 

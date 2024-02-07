@@ -37,13 +37,13 @@ final class Note extends LinkedListEntry<Note> {
     return 'id : $id\nbody : $body\ndateCreated : $dateCreated\ndateModified : $dateModified';
   }
 
-  Future<void> prune() async {
+  void prune() {
     body = null;
     dateCreated = null;
     dateModified = null;
   }
 
-  Future<void> reFetch(Note note) async {
+  void reFetch(Note note) {
     if (note.id != id) {
       throw ArgumentError('note.id and id is not the same in reFetch');
     }
@@ -53,12 +53,12 @@ final class Note extends LinkedListEntry<Note> {
     dateModified = note.dateModified;
   }
 
-  Future<void> update({required body}) async {
+  void update({required body}) {
     this.body = body;
     dateModified = DateTime.now().toIso8601String();
   }
 
-  Future<Map<String, dynamic>> toMap() async {
+  Map<String, dynamic> toMap() {
     return {
       'id': id,
       'body': body,
