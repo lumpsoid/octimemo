@@ -1,22 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:local_sqflite_api/local_sqflite_api.dart';
 import 'package:provider/provider.dart';
-import 'src/db_helper.dart';
-import 'src/note.dart';
 import 'src/note_card.dart';
 import 'src/note_manager.dart';
 
-void main() {
-  runApp(const MyApp());
+void main() async {
+  final db = await initializeNoteDb('notes.db', onCreate)
+      .run()
+      .then((value) => value.getOrElse((l) => throw l));
+  final localApi = LocalSqfliteApi(db: db);
+  runApp(MyApp(localApi: localApi));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  const MyApp({required this.localApi, super.key});
 
+  final LocalSqfliteApi localApi;
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<NoteManager>(
-      create: (context) => NoteManager(DbHelper()),
+      create: (context) => NoteManager(localApi),
       child: MaterialApp(
         title: 'Simple Memos',
         theme: ThemeData(
@@ -46,18 +50,13 @@ class MemosScreen extends StatelessWidget {
           children: [
             Expanded(
               child: Selector<NoteManager, int?>(
-                selector: (context, manager) => manager.itemCount,
+                selector: (context, manager) => manager.notesCount,
                 builder: (context, itemCount, child) => ListView.builder(
                   itemCount: itemCount,
                   itemBuilder: (context, index) {
                     NoteManager manager = Provider.of<NoteManager>(context);
                     final note = manager.getByIndex(index);
-
-                    if (note.isLoading) {
-                      return const NoteCardLoading();
-                    } else {
-                      return NoteCard(note: note, index: index);
-                    }
+                    return NoteCard(note: note, index: index);
                   },
                 ),
               ),
@@ -105,7 +104,7 @@ class MemosScreen extends StatelessWidget {
   TextFormField _buildingEditingTextInput(BuildContext context, int index) {
     NoteManager manager = context.read<NoteManager>();
     Note note = manager.getByIndex(index);
-    _noteController.text = note.body!;
+    _noteController.text = note.body;
 
     // Force keyboard to open when the state changes
     Future.delayed(
@@ -122,6 +121,7 @@ class MemosScreen extends StatelessWidget {
             onPressed: () async {
               String newBody = _noteController.text;
               if (newBody.isNotEmpty) {
+                manager.startEditing(index);
                 await manager.editNote(note, newBody);
                 _noteController.clear();
                 manager.stopEditing();

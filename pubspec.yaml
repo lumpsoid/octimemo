@@ -37,6 +37,8 @@ dependencies:
   fast_immutable_collections: ^10.2.2
   flutter_bloc: ^8.1.5
   rxdart: ^0.27.7
+  local_sqflite_api:
+    path: ./packages/local_sqflite_api
 
 dev_dependencies:
   flutter_test:

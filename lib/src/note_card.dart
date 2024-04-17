@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:local_sqflite_api/local_sqflite_api.dart';
 import 'package:provider/provider.dart';
 
-import 'note.dart' show Note;
 import 'note_manager.dart';
 
 class NoteCard extends StatefulWidget {
