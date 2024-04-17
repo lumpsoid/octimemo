@@ -25,26 +25,26 @@ class NoteManager extends ChangeNotifier {
   }
 
   Future<void> addNote(String body) async {
-    Note note = createNewNote(body).run();
+    Note note = Note.fromBody(body);
 
     _notes.add(note);
     notifyListeners();
-    insertNoteInDb(_localApi, note).run();
+    _localApi.insertNote(note).run();
   }
 
   Future<void> deleteNote(Note note) async {
     _notes.removeWhere((element) => element.id == note.id);
-    deleteNoteFromDb(_localApi, note.id).run();
     notifyListeners();
+    _localApi.deleteNote(note.id).run();
   }
 
   Future<void> editNote(
     Note note,
     String bodyNew,
   ) async {
-    final noteUpdated = updateNote(note, bodyNew);
-    updateNoteInDb(_localApi, noteUpdated).run();
+    final noteUpdated = note.copyWith(body: bodyNew);
     notifyListeners();
+    _localApi.updateNote(noteUpdated).run();
   }
 
   bool isEditing(int index) => editingIndex == index;

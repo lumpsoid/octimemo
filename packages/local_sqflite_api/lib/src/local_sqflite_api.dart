@@ -21,70 +21,66 @@ import 'package:rxdart/rxdart.dart';
 /// {@endtemplate}
 class LocalSqfliteApi {
   /// {@macro local_sqflite_api}
-  LocalSqfliteApi({required this.db});
+  LocalSqfliteApi();
 
   static const String notes_table = 'notes';
-  final Database db;
-  final notes = BehaviorSubject.seeded(IList(const <Note>[]));
-}
+  late final Database _db;
+  final _notes = BehaviorSubject.seeded(IList(const <Note>[]));
 
-Stream<IList<Note>> getNotesStreamFromDb(LocalSqfliteApi localApi) {
-  return localApi.notes.asBroadcastStream();
-}
+  Stream<IList<Note>> getNotesStream(LocalSqfliteApi localApi) {
+    return localApi._notes.asBroadcastStream();
+  }
 
-Task<List<Map<String, dynamic>>> getNoteFromDb(LocalSqfliteApi api, int id) =>
-    Task(() => api.db.query('notes', where: 'id = ?', whereArgs: [id]));
+  Task<List<Map<String, dynamic>>> getNote(LocalSqfliteApi api, int id) =>
+      Task(() => api._db.query('notes', where: 'id = ?', whereArgs: [id]));
 
-Task<int> insertNoteInDb(
-  LocalSqfliteApi api,
-  Note note,
-) =>
-    Task(
-      () => api.db.insert(
-        'notes',
-        noteToDb(note),
-      ),
-    );
+  Task<int> insertNote(
+    Note note,
+  ) =>
+      Task(
+        () => _db.insert(
+          'notes',
+          note.ToDb(),
+        ),
+      );
 
-Task<int> updateNoteInDb(LocalSqfliteApi api, Note note) => Task(
-      () => api.db.update(
-        'notes',
-        noteToDb(note),
-        where: 'id = ?',
-        whereArgs: [note.id],
-      ),
-    );
+  Task<int> updateNote(Note note) => Task(
+        () => _db.update(
+          'notes',
+          note.ToDb(),
+          where: 'id = ?',
+          whereArgs: [note.id],
+        ),
+      );
 
-Task<int> deleteNoteFromDb(LocalSqfliteApi api, int noteId) => Task(
-      () => api.db.delete(
-        'notes',
-        where: 'id = ?',
-        whereArgs: [noteId],
-      ),
-    );
+  Task<int> deleteNote(int noteId) => Task(
+        () => _db.delete(
+          'notes',
+          where: 'id = ?',
+          whereArgs: [noteId],
+        ),
+      );
 
-TaskEither<String, Database> initializeNoteDb(
-  String dbName,
-  FutureOr<void> Function(Database, int)? onCreate,
-) =>
-    TaskEither.tryCatch(
-      () async {
-        final databasesPath = await getDatabasesPath();
-        final path = join(
-          databasesPath,
-          dbName,
-        );
-        return openDatabase(
-          path,
-          version: 1,
-          onCreate: onCreate,
-        );
-      },
-      (error, stackTrace) => 'Error initializing database: $error',
-    );
+  Future<void> initializeDb() async {
+    try {
+      final databasesPath = await getDatabasesPath();
+      final path = join(
+        databasesPath,
+        'notes.db',
+      );
+      _db = await openDatabase(
+        path,
+        version: 1,
+        onCreate: _onCreate,
+      );
+      return;
+    } catch (error, __) {
+      throw Exception('Error initializing database: $error');
+    }
+  }
 
-Task<void> onCreate(Database db, int version) => Task(() async {
-      await db.execute('''
+  Future<void> _onCreate(Database db, int version) async {
+    await db.execute('''
       CREATE TABLE notes (
         id INTEGER PRIMARY KEY,
         body TEXT,
@@ -92,40 +88,33 @@ Task<void> onCreate(Database db, int version) => Task(() async {
         date_modified TEXT
       )
     ''');
-      await generateExampleNotes(db).run();
-    });
+    await generateExampleNotes(db).run();
+  }
 
-Task<void> generateExampleNotes(Database db) => Task(() async {
-      await db.insert(
-        'notes',
-        noteToDb(
-          createNewNote(
+  Task<void> generateExampleNotes(Database db) => Task(() async {
+        await db.insert(
+          'notes',
+          Note.fromBody(
             'text input field at the bottom will be always there for you',
-          ).run(),
-        ),
-      );
-      await db.insert(
-        "notes",
-        noteToDb(
-          createNewNote(
+          ).ToDb(),
+        );
+        await db.insert(
+          'notes',
+          Note.fromBody(
             'to delete this note, swipte it to the left',
-          ).run(),
-        ),
-      );
-      await db.insert(
-        "notes",
-        noteToDb(
-          createNewNote(
+          ).ToDb(),
+        );
+        await db.insert(
+          'notes',
+          Note.fromBody(
             'to edit this note, swipe it to the rigth',
-          ).run(),
-        ),
-      );
-      await db.insert(
-        "notes",
-        noteToDb(
-          createNewNote(
+          ).ToDb(),
+        );
+        await db.insert(
+          'notes',
+          Note.fromBody(
             'and you good to go',
-          ).run(),
-        ),
-      );
-    });
+          ).ToDb(),
+        );
+      });
+}

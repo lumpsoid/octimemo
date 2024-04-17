@@ -5,10 +5,7 @@ import 'src/note_card.dart';
 import 'src/note_manager.dart';
 
 void main() async {
-  final db = await initializeNoteDb('notes.db', onCreate)
-      .run()
-      .then((value) => value.getOrElse((l) => throw l));
-  final localApi = LocalSqfliteApi(db: db);
+  final localApi = LocalSqfliteApi()..initializeDb();
   runApp(MyApp(localApi: localApi));
 }
 
