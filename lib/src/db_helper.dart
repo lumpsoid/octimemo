@@ -12,7 +12,7 @@ class DbHelper {
   static late Database _db;
   late int noteCount;
 
-  // there is a problem with multiple async intialization of db
+  // there is a problem with multiple async initialization of db
   Future<Database> get db async {
     if (isConnected) {
       return _db;
