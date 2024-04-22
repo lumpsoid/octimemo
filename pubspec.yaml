@@ -33,6 +33,15 @@ dependencies:
 
   sqflite: ^2.3.0
   provider: ^6.1.1
+  fpdart: ^1.1.0
+  fast_immutable_collections: ^10.2.2
+  flutter_bloc: ^8.1.5
+  rxdart: ^0.27.7
+  equatable: ^2.0.5
+  note_sqflite_api:
+    path: ./packages/note_sqflite_api
+  notes_repository:
+    path: ./packages/notes_repository
 
 dev_dependencies:
   flutter_test:
