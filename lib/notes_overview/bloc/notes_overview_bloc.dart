@@ -14,6 +14,12 @@ class NotesOverviewBloc extends Bloc<NotesOverviewEvent, NotesOverviewState> {
         super(const NotesOverviewState()) {
     on<NotesOverviewSubscriptionRequest>(_onSubscriptionRequest);
     on<NotesOverviewToClipboard>(_onToClipboard);
+    on<NotesOverviewInputFieldChanged>(_onTextChange);
+    on<NotesOverviewNoteAdd>(_onNoteAdd);
+    on<NotesOverviewNoteEdit>(_onNoteEdit);
+    on<NotesOverviewNoteUpdate>(_onNoteUpdate);
+    on<NotesOverviewNoteDelete>(_onNoteDelete);
+    on<NotesOverviewNoteEditCancel>(_onNoteEditCancel);
   }
 
   final NotesRepository _notesRepository;
@@ -46,5 +52,75 @@ class NotesOverviewBloc extends Bloc<NotesOverviewEvent, NotesOverviewState> {
     );
     emit(state.copyWith(message: 'Copied to clipboard'));
     emit(state.copyWith(message: ''));
+  }
+
+  Future<void> _onTextChange(
+    NotesOverviewInputFieldChanged event,
+    Emitter<NotesOverviewState> emit,
+  ) async {
+    emit(state.copyWith(inputField: event.text));
+  }
+
+  Future<void> _onNoteAdd(
+    NotesOverviewNoteAdd event,
+    Emitter<NotesOverviewState> emit,
+  ) async {
+    final note = Note.fromBody(state.inputField);
+    await _notesRepository.insertNote(note).run();
+  }
+
+  Future<void> _onNoteDelete(
+    NotesOverviewNoteDelete event,
+    Emitter<NotesOverviewState> emit,
+  ) async {
+    await _notesRepository.deleteNote(event.id).run();
+  }
+
+  Future<void> _onNoteUpdate(
+    NotesOverviewNoteUpdate event,
+    Emitter<NotesOverviewState> emit,
+  ) async {
+    final note = state.notes.firstWhere(
+      (note) => note.id == state.editingNoteId,
+    );
+    if (note.body != state.inputField) {
+      await _notesRepository
+          .updateNote(
+            note.copyWith(
+              body: state.inputField,
+            ),
+          )
+          .run();
+    }
+    emit(
+      state.copyWith(
+        editingNoteId: 0,
+        inputField: '',
+      ),
+    );
+  }
+
+  Future<void> _onNoteEdit(
+    NotesOverviewNoteEdit event,
+    Emitter<NotesOverviewState> emit,
+  ) async {
+    emit(
+      state.copyWith(
+        editingNoteId: event.note.id,
+        inputField: event.note.body,
+      ),
+    );
+  }
+
+  Future<void> _onNoteEditCancel(
+    NotesOverviewNoteEditCancel event,
+    Emitter<NotesOverviewState> emit,
+  ) async {
+    emit(
+      state.copyWith(
+        editingNoteId: 0,
+        inputField: '',
+      ),
+    );
   }
 }

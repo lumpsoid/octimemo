@@ -26,39 +26,55 @@ class NoteSqfliteApi {
   late final Database _db;
   final _notes = BehaviorSubject.seeded(IList(const <Note>[]));
 
-  Stream<IList<Note>> getNotesStream(NoteSqfliteApi localApi) {
-    return localApi._notes.asBroadcastStream();
+  Stream<IList<Note>> getNotesStream() {
+    return _notes.asBroadcastStream();
   }
 
-  Task<List<Map<String, dynamic>>> getNote(NoteSqfliteApi api, int id) =>
-      Task(() => api._db.query('notes', where: 'id = ?', whereArgs: [id]));
+  Task<List<Map<String, dynamic>>> getNote(int id) =>
+      Task(() => _db.query('notes', where: 'id = ?', whereArgs: [id]));
 
-  Task<int> insertNote(
+  Task<void> fetchNotes() => Task(() async {
+        final notes = await _db.query('notes');
+        _notes.add(notes
+            .map(
+              (note) => Note.fromDb(note),
+            )
+            .toIList());
+      });
+
+  Task<void> insertNote(
     Note note,
   ) =>
-      Task(
-        () => _db.insert(
+      Task(() async {
+        _db.insert(
           'notes',
           note.ToDb(),
-        ),
-      );
+        );
+        _notes.add(_notes.value.add(note));
+      });
 
-  Task<int> updateNote(Note note) => Task(
-        () => _db.update(
+  Task<void> updateNote(Note note) => Task(() async {
+        _db.update(
           'notes',
           note.ToDb(),
           where: 'id = ?',
           whereArgs: [note.id],
-        ),
-      );
+        );
+        _notes.add(_notes.value
+            .map(
+              (n) => n.id == note.id ? note : n,
+            )
+            .toIList());
+      });
 
-  Task<int> deleteNote(int noteId) => Task(
-        () => _db.delete(
+  Task<void> deleteNote(int noteId) => Task(() async {
+        _db.delete(
           'notes',
           where: 'id = ?',
           whereArgs: [noteId],
-        ),
-      );
+        );
+        _notes.add(_notes.value.removeWhere((note) => note.id == noteId));
+      });
 
   Future<void> initializeDb() async {
     try {
@@ -72,6 +88,7 @@ class NoteSqfliteApi {
         version: 1,
         onCreate: _onCreate,
       );
+      await fetchNotes().run();
       return;
     } catch (error, __) {
       throw Exception('Error initializing database: $error');
@@ -83,8 +100,8 @@ class NoteSqfliteApi {
       CREATE TABLE notes (
         id INTEGER PRIMARY KEY,
         body TEXT,
-        date_created TEXT,
-        date_modified TEXT
+        date_created INTEGER,
+        date_modified INTEGER
       )
     ''');
     await generateExampleNotes(db).run();

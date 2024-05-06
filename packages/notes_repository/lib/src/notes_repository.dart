@@ -13,29 +13,29 @@ class NotesRepository {
   final NoteSqfliteApi _localApi;
 
   Stream<IList<Note>> getNotesStream() {
-    return _localApi.getNotesStream(_localApi);
+    return _localApi.getNotesStream();
   }
 
   Task<List<Map<String, dynamic>>> getNote(
     int id,
   ) =>
-      _localApi.getNote(_localApi, id);
+      _localApi.getNote(id);
 
-  Task<int> insertNote(
+  Task<void> insertNote(
     Note note,
   ) =>
       _localApi.insertNote(
         note,
       );
 
-  Task<int> updateNote(
+  Task<void> updateNote(
     Note note,
   ) =>
       _localApi.updateNote(
         note,
       );
 
-  Task<int> deleteNote(
+  Task<void> deleteNote(
     int noteId,
   ) =>
       _localApi.deleteNote(
