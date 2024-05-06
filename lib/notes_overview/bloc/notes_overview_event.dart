@@ -24,6 +24,32 @@ final class NotesOverviewNoteAdd extends NotesOverviewEvent {
   const NotesOverviewNoteAdd();
 }
 
+final class NotesOverviewNoteUpdate extends NotesOverviewEvent {
+  const NotesOverviewNoteUpdate();
+}
+
+final class NotesOverviewNoteEdit extends NotesOverviewEvent {
+  const NotesOverviewNoteEdit(this.note);
+
+  final Note note;
+
+  @override
+  List<Object> get props => [note];
+}
+
+final class NotesOverviewNoteEditCancel extends NotesOverviewEvent {
+  const NotesOverviewNoteEditCancel();
+}
+
+final class NotesOverviewNoteDelete extends NotesOverviewEvent {
+  const NotesOverviewNoteDelete(this.id);
+
+  final int id;
+
+  @override
+  List<Object> get props => [id];
+}
+
 final class NotesOverviewToClipboard extends NotesOverviewEvent {
   const NotesOverviewToClipboard(this.text);
 
