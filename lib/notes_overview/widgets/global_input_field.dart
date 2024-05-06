@@ -34,6 +34,7 @@ class _GlobalInputFieldState extends State<GlobalInputField> {
     }
     return TextField(
       controller: _controller,
+      focusNode: _focusNode,
       maxLines: null,
       onChanged: (value) => context.read<NotesOverviewBloc>().add(
             NotesOverviewInputFieldChanged(value),
