@@ -52,6 +52,11 @@ class Note extends Equatable {
     };
   }
 
+  String getDateCreatedFormatted() {
+    final noteTimeCreated = DateTime.fromMillisecondsSinceEpoch(dateCreated);
+    return '${noteTimeCreated.year}-${noteTimeCreated.month}-${noteTimeCreated.day} ${noteTimeCreated.hour}:${noteTimeCreated.minute}';
+  }
+
   Note copyWith({
     int? id,
     String? body,

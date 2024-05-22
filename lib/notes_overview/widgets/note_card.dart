@@ -26,16 +26,28 @@ class NoteCard extends StatelessWidget {
             },
           ),
           Expanded(
-            child: GestureDetector(
-              onLongPress: () async {
-                context.read<NotesOverviewBloc>().add(
-                      NotesOverviewToClipboard(note.body),
-                    );
-              },
-              child: Text(
-                note.body,
-                style: const TextStyle(fontSize: 16.0),
-              ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  note.getDateCreatedFormatted(),
+                  style: const TextStyle(
+                    fontSize: 12.0,
+                    color: Colors.grey,
+                  ),
+                ),
+                GestureDetector(
+                  onLongPress: () async {
+                    context.read<NotesOverviewBloc>().add(
+                          NotesOverviewToClipboard(note.body),
+                        );
+                  },
+                  child: Text(
+                    note.body,
+                    style: const TextStyle(fontSize: 16.0),
+                  ),
+                ),
+              ],
             ),
           ),
           IconButton(
