@@ -72,6 +72,23 @@ final class NotesOverviewDatePick extends NotesOverviewEvent {
   List<Object> get props => [datePicked];
 }
 
-final class NotesOverviewFilterClean extends NotesOverviewEvent {
-  const NotesOverviewFilterClean();
+final class NotesOverviewDatePickEnd extends NotesOverviewEvent {
+  const NotesOverviewDatePickEnd();
+}
+
+final class NotesOverviewSearchStart extends NotesOverviewEvent {
+  const NotesOverviewSearchStart();
+}
+
+final class NotesOverviewSearchEnd extends NotesOverviewEvent {
+  const NotesOverviewSearchEnd();
+}
+
+final class NotesOverviewSearchQuery extends NotesOverviewEvent {
+  const NotesOverviewSearchQuery(this.query);
+
+  final String query;
+
+  @override
+  List<Object> get props => [query];
 }

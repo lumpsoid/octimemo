@@ -9,9 +9,9 @@ class OverviewTitle extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<NotesOverviewBloc, NotesOverviewState>(
         builder: (context, state) {
-      return state.filteredNotes.isEmpty
-          ? const Text('Memos')
-          : const Text('Filtered Memos');
+      return state.searchStatus || state.datePicked != 0
+          ? const Text('Filtered Memos')
+          : const Text('Memos');
     });
   }
 }

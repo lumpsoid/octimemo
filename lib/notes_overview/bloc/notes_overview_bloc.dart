@@ -21,7 +21,10 @@ class NotesOverviewBloc extends Bloc<NotesOverviewEvent, NotesOverviewState> {
     on<NotesOverviewNoteDelete>(_onNoteDelete);
     on<NotesOverviewNoteEditCancel>(_onNoteEditCancel);
     on<NotesOverviewDatePick>(_onDatePick);
-    on<NotesOverviewFilterClean>(_onFilterClean);
+    on<NotesOverviewDatePickEnd>(_onDatePickEnd);
+    on<NotesOverviewSearchStart>(_onSearchStart);
+    on<NotesOverviewSearchEnd>(_onSearchEnd);
+    on<NotesOverviewSearchQuery>(_onSearchQuery);
   }
 
   final NotesRepository _notesRepository;
@@ -135,16 +138,76 @@ class NotesOverviewBloc extends Bloc<NotesOverviewEvent, NotesOverviewState> {
         DateTime.fromMillisecondsSinceEpoch(note.dateCreated)
             .eqvYearMonthDay(pickedDate));
     emit(
-      state.copyWith(filteredNotes: filteredNotes),
+      state.copyWith(
+        filteredNotes: filteredNotes,
+        datePicked: pickedDate.millisecondsSinceEpoch,
+      ),
     );
   }
 
-  Future<void> _onFilterClean(
-    NotesOverviewFilterClean event,
+  Future<void> _onDatePickEnd(
+    NotesOverviewDatePickEnd event,
     Emitter<NotesOverviewState> emit,
   ) async {
     emit(
-      state.copyWith(filteredNotes: const IList<Note>.empty()),
+      state.copyWith(
+        filteredNotes: const IList<Note>.empty(),
+        datePicked: 0,
+      ),
+    );
+  }
+
+  Future<void> _onSearchStart(
+    NotesOverviewSearchStart event,
+    Emitter<NotesOverviewState> emit,
+  ) async {
+    emit(
+      state.copyWith(
+        searchStatus: true,
+      ),
+    );
+  }
+
+  Future<void> _onSearchEnd(
+    NotesOverviewSearchEnd event,
+    Emitter<NotesOverviewState> emit,
+  ) async {
+    emit(
+      state.copyWith(
+        searchStatus: false,
+        filteredNotes: const IList.empty(),
+      ),
+    );
+  }
+
+  Future<void> _onSearchQuery(
+    NotesOverviewSearchQuery event,
+    Emitter<NotesOverviewState> emit,
+  ) async {
+    final query = event.query;
+    late IList<Note> filteredNotes;
+    if (state.datePicked != 0) {
+      final datePicked = DateTime.fromMillisecondsSinceEpoch(state.datePicked);
+
+      filteredNotes = state.notes.retainWhere((note) {
+        final sameDate = DateTime.fromMillisecondsSinceEpoch(note.dateCreated)
+            .eqvYearMonthDay(datePicked);
+        final containsQuery = note.body.toLowerCase().contains(
+              query.toLowerCase(),
+            );
+        return sameDate && containsQuery;
+      });
+    } else {
+      filteredNotes = state.notes.retainWhere(
+        (note) => note.body.toLowerCase().contains(
+              query.toLowerCase(),
+            ),
+      );
+    }
+    emit(
+      state.copyWith(
+        filteredNotes: filteredNotes,
+      ),
     );
   }
 }

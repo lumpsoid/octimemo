@@ -9,8 +9,13 @@ class DatePickerButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<NotesOverviewBloc, NotesOverviewState>(
         builder: (context, state) {
-      return state.filteredNotes.isEmpty
+      return state.datePicked != 0
           ? IconButton(
+              onPressed: () => context.read<NotesOverviewBloc>().add(
+                    const NotesOverviewDatePickEnd(),
+                  ),
+              icon: const Icon(Icons.calendar_today_outlined))
+          : IconButton(
               icon: const Icon(Icons.calendar_month),
               padding: const EdgeInsets.fromLTRB(8.0, 0.0, 20.0, 0.0),
               onPressed: () async {
@@ -28,12 +33,7 @@ class DatePickerButton extends StatelessWidget {
                     .read<NotesOverviewBloc>()
                     .add(NotesOverviewDatePick(datePicked));
               },
-            )
-          : IconButton(
-              onPressed: () => context.read<NotesOverviewBloc>().add(
-                    const NotesOverviewFilterClean(),
-                  ),
-              icon: const Icon(Icons.clear));
+            );
     });
   }
 }

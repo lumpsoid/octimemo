@@ -50,12 +50,13 @@ class NotesOverviewScreen extends StatelessWidget {
         title: const OverviewTitle(),
         actions: const [
           DatePickerButton(),
+          SearchButton(),
         ],
       ),
       body: SafeArea(
         child: BlocBuilder<NotesOverviewBloc, NotesOverviewState>(
           builder: (context, state) {
-            if (state.filteredNotes.isNotEmpty) {
+            if (state.datePicked != 0 || state.searchStatus) {
               return const NotesFilteredList();
             }
             return const NotesList();

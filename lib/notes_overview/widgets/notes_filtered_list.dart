@@ -14,8 +14,19 @@ class NotesFilteredList extends StatelessWidget {
         }
         return Column(
           children: [
+            state.searchStatus
+                ? TextField(
+                    onChanged: (value) => context.read<NotesOverviewBloc>().add(
+                          NotesOverviewSearchQuery(value),
+                        ),
+                    decoration: const InputDecoration(
+                      hintText: 'Search',
+                      prefixIcon: Icon(Icons.search),
+                    ),
+                  )
+                : const SizedBox(),
             Expanded(
-              child: state.notes.isEmpty
+              child: state.filteredNotes.isEmpty
                   ? const Center(child: Text('Filter is empty.'))
                   : ListView.builder(
                       itemCount: state.filteredNotes.length,
