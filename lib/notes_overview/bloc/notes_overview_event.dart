@@ -62,3 +62,16 @@ final class NotesOverviewToClipboard extends NotesOverviewEvent {
 final class NotesOverviewToggleTheme extends NotesOverviewEvent {
   const NotesOverviewToggleTheme();
 }
+
+final class NotesOverviewDatePick extends NotesOverviewEvent {
+  const NotesOverviewDatePick(this.datePicked);
+
+  final DateTime datePicked;
+
+  @override
+  List<Object> get props => [datePicked];
+}
+
+final class NotesOverviewFilterClean extends NotesOverviewEvent {
+  const NotesOverviewFilterClean();
+}

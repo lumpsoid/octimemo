@@ -11,6 +11,7 @@ final class NotesOverviewState extends Equatable {
     this.inputField = '',
     this.isDarkTheme = false,
     this.editingNoteId = 0,
+    this.filteredNotes = const IList<Note>.empty(),
   });
 
   final NotesOverviewStatus status;
@@ -20,6 +21,7 @@ final class NotesOverviewState extends Equatable {
   final String message;
   final String inputField;
   final bool isDarkTheme;
+  final IList<Note> filteredNotes;
 
   NotesOverviewState copyWith({
     NotesOverviewStatus? status,
@@ -28,6 +30,7 @@ final class NotesOverviewState extends Equatable {
     String? message,
     String? inputField,
     int? editingNoteId,
+    IList<Note>? filteredNotes,
   }) {
     return NotesOverviewState(
       status: status ?? this.status,
@@ -36,6 +39,7 @@ final class NotesOverviewState extends Equatable {
       message: message ?? this.message,
       inputField: inputField ?? this.inputField,
       editingNoteId: editingNoteId ?? this.editingNoteId,
+      filteredNotes: filteredNotes ?? this.filteredNotes,
     );
   }
 
@@ -47,5 +51,6 @@ final class NotesOverviewState extends Equatable {
         lastDeletedNote,
         inputField,
         editingNoteId,
+        filteredNotes,
       ];
 }

@@ -2,7 +2,7 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:note_sqflite_api/note_sqflite_api.dart';
+import 'package:fpdart/fpdart.dart';
 import 'package:notes_repository/notes_repository.dart';
 
 part 'notes_overview_event.dart';
@@ -20,6 +20,8 @@ class NotesOverviewBloc extends Bloc<NotesOverviewEvent, NotesOverviewState> {
     on<NotesOverviewNoteUpdate>(_onNoteUpdate);
     on<NotesOverviewNoteDelete>(_onNoteDelete);
     on<NotesOverviewNoteEditCancel>(_onNoteEditCancel);
+    on<NotesOverviewDatePick>(_onDatePick);
+    on<NotesOverviewFilterClean>(_onFilterClean);
   }
 
   final NotesRepository _notesRepository;
@@ -121,6 +123,28 @@ class NotesOverviewBloc extends Bloc<NotesOverviewEvent, NotesOverviewState> {
         editingNoteId: 0,
         inputField: '',
       ),
+    );
+  }
+
+  Future<void> _onDatePick(
+    NotesOverviewDatePick event,
+    Emitter<NotesOverviewState> emit,
+  ) async {
+    final pickedDate = event.datePicked;
+    final filteredNotes = state.notes.retainWhere((note) =>
+        DateTime.fromMillisecondsSinceEpoch(note.dateCreated)
+            .eqvYearMonthDay(pickedDate));
+    emit(
+      state.copyWith(filteredNotes: filteredNotes),
+    );
+  }
+
+  Future<void> _onFilterClean(
+    NotesOverviewFilterClean event,
+    Emitter<NotesOverviewState> emit,
+  ) async {
+    emit(
+      state.copyWith(filteredNotes: const IList<Note>.empty()),
     );
   }
 }

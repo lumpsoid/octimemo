@@ -47,43 +47,18 @@ class NotesOverviewScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Memos'),
-        // actions: [
-        // IconButton(
-        //   icon: const Icon(Icons.dark_mode_outlined),
-        //   onPressed: () {
-        // context
-        //     .read<NotesOverviewBloc>()
-        //     .add(const NotesOverviewToggleTheme());
-        // },
-        // ),
-        // ],
+        title: const OverviewTitle(),
+        actions: const [
+          DatePickerButton(),
+        ],
       ),
       body: SafeArea(
         child: BlocBuilder<NotesOverviewBloc, NotesOverviewState>(
           builder: (context, state) {
-            if (state.status == NotesOverviewStatus.loading) {
-              return const Center(child: CircularProgressIndicator());
+            if (state.filteredNotes.isNotEmpty) {
+              return const NotesFilteredList();
             }
-            return Column(
-              children: [
-                Expanded(
-                  child: state.notes.isEmpty
-                      ? const Center(child: Text('No notes.'))
-                      : ListView.builder(
-                          itemCount: state.notes.length,
-                          itemBuilder: (context, index) {
-                            final reversedIndex =
-                                state.notes.length - 1 - index;
-                            return NoteCard(
-                              note: state.notes[reversedIndex],
-                            );
-                          },
-                        ),
-                ),
-                const GlobalInputField(),
-              ],
-            );
+            return const NotesList();
           },
         ),
       ),
