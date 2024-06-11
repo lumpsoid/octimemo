@@ -12,8 +12,9 @@ class NoteCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.all(10.0),
       child: GestureDetector(
+        behavior: HitTestBehavior.opaque,
         onLongPressStart: (details) => _showMenu(context, details),
         onTap: () => context.read<NotesOverviewBloc>().add(
               NotesOverviewNoteEdit(note),
