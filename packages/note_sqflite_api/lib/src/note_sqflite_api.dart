@@ -117,13 +117,25 @@ class NoteSqfliteApi {
         await db.insert(
           'notes',
           Note.fromBody(
-            'to delete this note, swipte it to the left',
+            'to delete this note, try to long tap on this note to see additional actions',
           ).ToDb(),
         );
         await db.insert(
           'notes',
           Note.fromBody(
-            'to edit this note, swipe it to the rigth',
+            'to edit this note, try to tap on this note',
+          ).ToDb(),
+        );
+        await db.insert(
+          'notes',
+          Note.fromBody(
+            'also you can use search button to filter notes',
+          ).ToDb(),
+        );
+        await db.insert(
+          'notes',
+          Note.fromBody(
+            'and use callendar button to filter notes by date, this two buttons can be used together',
           ).ToDb(),
         );
         await db.insert(
