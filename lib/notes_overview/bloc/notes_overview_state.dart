@@ -14,6 +14,7 @@ final class NotesOverviewState extends Equatable {
     this.filteredNotes = const IList<Note>.empty(),
     this.searchStatus = false,
     this.datePicked = 0,
+    this.cleanInputField = false,
   });
 
   final NotesOverviewStatus status;
@@ -26,6 +27,7 @@ final class NotesOverviewState extends Equatable {
   final IList<Note> filteredNotes;
   final bool searchStatus;
   final int datePicked;
+  final bool cleanInputField;
 
   NotesOverviewState copyWith({
     NotesOverviewStatus? status,
@@ -37,6 +39,7 @@ final class NotesOverviewState extends Equatable {
     IList<Note>? filteredNotes,
     bool? searchStatus,
     int? datePicked,
+    bool? cleanInputField,
   }) {
     return NotesOverviewState(
       status: status ?? this.status,
@@ -48,6 +51,7 @@ final class NotesOverviewState extends Equatable {
       filteredNotes: filteredNotes ?? this.filteredNotes,
       searchStatus: searchStatus ?? this.searchStatus,
       datePicked: datePicked ?? this.datePicked,
+      cleanInputField: cleanInputField ?? this.cleanInputField,
     );
   }
 
@@ -62,5 +66,6 @@ final class NotesOverviewState extends Equatable {
         filteredNotes,
         searchStatus,
         datePicked,
+        cleanInputField,
       ];
 }

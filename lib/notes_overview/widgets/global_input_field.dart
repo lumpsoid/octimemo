@@ -22,72 +22,92 @@ class _GlobalInputFieldState extends State<GlobalInputField> {
 
   @override
   Widget build(BuildContext context) {
-    // Force keyboard to open when the state changes
-    final noteEditId = context.select(
-      (NotesOverviewBloc bloc) => bloc.state.editingNoteId,
-    );
-    final isEditing = noteEditId != 0;
-
-    if (isEditing) {
-      FocusScope.of(context).requestFocus(_focusNode);
-      _controller.text = context.read<NotesOverviewBloc>().state.inputField;
-    }
-    return TextField(
-      controller: _controller,
-      focusNode: _focusNode,
-      maxLines: null,
-      onChanged: (value) => context.read<NotesOverviewBloc>().add(
-            NotesOverviewInputFieldChanged(value),
-          ),
-      decoration: InputDecoration(
-        hintText: 'Enter your note...',
-        border: const OutlineInputBorder(),
-        prefixIcon: isEditing
-            ? IconButton(
-                onPressed: () {
-                  _controller.clear();
-                  context.read<NotesOverviewBloc>().add(
-                        const NotesOverviewNoteEditCancel(),
+    return MultiBlocListener(
+      listeners: [
+        // clean the input field when the edited note is deleted
+        BlocListener<NotesOverviewBloc, NotesOverviewState>(
+          listenWhen: (previous, current) =>
+              previous != current && current.cleanInputField,
+          listener: (context, state) {
+            _controller.text = '';
+          },
+        ),
+        // Force keyboard to open when a note is being edited
+        BlocListener<NotesOverviewBloc, NotesOverviewState>(
+          listenWhen: (previous, current) =>
+              previous != current && current.editingNoteId != 0,
+          listener: (context, state) {
+            FocusScope.of(context).requestFocus(_focusNode);
+            _controller.text =
+                context.read<NotesOverviewBloc>().state.inputField;
+          },
+        ),
+      ],
+      child: BlocSelector<NotesOverviewBloc, NotesOverviewState, bool>(
+        selector: (state) {
+          return state.editingNoteId != 0;
+        },
+        builder: (context, isEditing) {
+          return TextFormField(
+            controller: _controller,
+            focusNode: _focusNode,
+            maxLines: null,
+            onChanged: (value) => context.read<NotesOverviewBloc>().add(
+                  NotesOverviewInputFieldChanged(value),
+                ),
+            decoration: InputDecoration(
+              hintText: 'Enter your note...',
+              border: const OutlineInputBorder(),
+              prefixIcon: isEditing
+                  ? IconButton(
+                      onPressed: () {
+                        _controller.clear();
+                        context.read<NotesOverviewBloc>().add(
+                              const NotesOverviewNoteEditCancel(),
+                            );
+                      },
+                      icon: const Icon(Icons.cancel_outlined),
+                    )
+                  : null,
+              suffixIcon: IconButton(
+                  onPressed: () {
+                    if (_controller.text.isEmpty) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: const Text(
+                            'Text field is empty.',
+                            style: TextStyle(
+                              fontSize: 18.0,
+                            ),
+                          ),
+                          duration: const Duration(milliseconds: 1500),
+                          width: 280.0, // Width of the SnackBar.
+                          padding: const EdgeInsets.symmetric(
+                            horizontal:
+                                8.0, // Inner padding for SnackBar content.
+                          ),
+                          behavior: SnackBarBehavior.floating,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                          ),
+                        ),
                       );
-                },
-                icon: const Icon(Icons.cancel_outlined),
-              )
-            : null,
-        suffixIcon: IconButton(
-            onPressed: () {
-              if (_controller.text.isEmpty) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: const Text(
-                      'Text field is empty.',
-                      style: TextStyle(
-                        fontSize: 18.0,
-                      ),
-                    ),
-                    duration: const Duration(milliseconds: 1500),
-                    width: 280.0, // Width of the SnackBar.
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 8.0, // Inner padding for SnackBar content.
-                    ),
-                    behavior: SnackBarBehavior.floating,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10.0),
-                    ),
-                  ),
-                );
-              }
-              _controller.clear();
-              if (isEditing) {
-                context.read<NotesOverviewBloc>().add(
-                      const NotesOverviewNoteUpdate(),
-                    );
-              } else {
-                context.read<NotesOverviewBloc>().add(
-                      const NotesOverviewNoteAdd(),
-                    );
-              }
-            },
-            icon: const Icon(Icons.send)),
+                    }
+                    _controller.clear();
+                    if (isEditing) {
+                      context.read<NotesOverviewBloc>().add(
+                            const NotesOverviewNoteUpdate(),
+                          );
+                    } else {
+                      context.read<NotesOverviewBloc>().add(
+                            const NotesOverviewNoteAdd(),
+                          );
+                    }
+                  },
+                  icon: const Icon(Icons.send)),
+            ),
+          );
+        },
       ),
     );
   }

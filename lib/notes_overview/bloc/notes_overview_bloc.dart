@@ -78,6 +78,20 @@ class NotesOverviewBloc extends Bloc<NotesOverviewEvent, NotesOverviewState> {
     NotesOverviewNoteDelete event,
     Emitter<NotesOverviewState> emit,
   ) async {
+    if (event.id == state.editingNoteId) {
+      emit(
+        state.copyWith(
+          editingNoteId: 0,
+          inputField: '',
+          cleanInputField: true,
+        ),
+      );
+      emit(
+        state.copyWith(
+          cleanInputField: false,
+        ),
+      );
+    }
     await _notesRepository.deleteNote(event.id).run();
   }
 
