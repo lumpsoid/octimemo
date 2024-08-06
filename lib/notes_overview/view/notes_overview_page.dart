@@ -20,20 +20,12 @@ class NotesOverviewPage extends StatelessWidget {
             listener: (context, state) {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
+                  width: double.infinity,
                   content: Text(
                     state.message,
                     style: const TextStyle(
                       fontSize: 18.0,
                     ),
-                  ),
-                  duration: const Duration(milliseconds: 1500),
-                  width: 280.0, // Width of the SnackBar.
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 8.0, // Inner padding for SnackBar content.
-                  ),
-                  behavior: SnackBarBehavior.floating,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10.0),
                   ),
                 ),
               );
@@ -49,7 +41,6 @@ class NotesOverviewPage extends StatelessWidget {
                 ..showSnackBar(
                   SnackBar(
                     width: double.infinity,
-                    duration: const Duration(milliseconds: 1500),
                     content: const Text(
                       'Note was deleted',
                       style: TextStyle(
