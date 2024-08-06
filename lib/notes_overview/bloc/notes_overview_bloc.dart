@@ -27,7 +27,6 @@ class NotesOverviewBloc extends Bloc<NotesOverviewEvent, NotesOverviewState> {
     on<NotesOverviewSearchEnd>(_onSearchEnd);
     on<NotesOverviewSearchQuery>(_onSearchQuery);
     on<NotesOverviewNoteRestore>(_onNoteRestore);
-    on<NotesOverviewNoteDeleteCompletely>(_onNoteDeleteCompletely);
     on<NotesOverviewExport>(_onExport);
     on<NotesOverviewImport>(_onImport);
   }
@@ -117,17 +116,6 @@ class NotesOverviewBloc extends Bloc<NotesOverviewEvent, NotesOverviewState> {
           ),
         )
         .run();
-  }
-
-  Future<void> _onNoteDeleteCompletely(
-    NotesOverviewNoteDeleteCompletely event,
-    Emitter<NotesOverviewState> emit,
-  ) async {
-    emit(
-      state.copyWith(
-        lastDeletedNote: const Note.empty(),
-      ),
-    );
   }
 
   Future<void> _onNoteUpdate(
