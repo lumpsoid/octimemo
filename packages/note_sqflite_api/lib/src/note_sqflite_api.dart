@@ -55,6 +55,20 @@ class NoteSqfliteApi {
         _notes.add(_notes.value.add(note));
       });
 
+  Task<void> insertNotes(
+    IList<Note> notes,
+  ) =>
+      Task(() async {
+        await _db.transaction(
+          (txn) async {
+            for (final note in notes) {
+              txn.insert('notes', note.ToDb());
+            }
+          },
+        );
+        _notes.add(_notes.value.addAll(notes));
+      });
+
   Task<void> updateNote(Note note) => Task(() async {
         _db.update(
           'notes',
@@ -91,15 +105,18 @@ class NoteSqfliteApi {
       });
 
   Task<void> importNotes(String filePath) => Task(() async {
-        final result = await File(filePath).readAsString();
-        final notesImported =
-            result.trim().split('\n').map(Note.fromCsv).toIList();
-        // safe  measure, filter only unique notes
-        // which is not in the app now
-        final notes = notesImported.difference(
-            Eq.eqInt.contramap<Note>((n) => n.id), _notes.value);
-        _notes.add(_notes.value.addAll(notes));
-        notes.forEach((el) => insertNote(el).run());
+        final notesOnlyNew = await File(filePath).readAsString().then(
+              (result) => result
+                  .trim()
+                  .split('\n')
+                  .map(Note.fromCsv)
+                  .difference(
+                    Eq.eqInt.contramap<Note>((n) => n.id),
+                    _notes.value,
+                  )
+                  .toIList(),
+            );
+        await insertNotes(notesOnlyNew).run();
       });
 
   Future<void> initializeDb() async {
