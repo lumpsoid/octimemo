@@ -41,4 +41,16 @@ class NotesRepository {
       _localApi.deleteNote(
         noteId,
       );
+  Task<void> exportNotes(
+    String filePath,
+  ) =>
+      _localApi.exportNotes(
+        filePath,
+      );
+  Task<void> importNotes(
+    String filePath,
+  ) =>
+      _localApi.importNotes(
+        filePath,
+      );
 }

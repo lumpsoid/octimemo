@@ -1,4 +1,5 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
@@ -27,6 +28,8 @@ class NotesOverviewBloc extends Bloc<NotesOverviewEvent, NotesOverviewState> {
     on<NotesOverviewSearchQuery>(_onSearchQuery);
     on<NotesOverviewNoteRestore>(_onNoteRestore);
     on<NotesOverviewNoteDeleteCompletely>(_onNoteDeleteCompletely);
+    on<NotesOverviewExport>(_onExport);
+    on<NotesOverviewImport>(_onImport);
   }
 
   final NotesRepository _notesRepository;
@@ -58,7 +61,6 @@ class NotesOverviewBloc extends Bloc<NotesOverviewEvent, NotesOverviewState> {
       ClipboardData(text: event.text),
     );
     emit(state.copyWith(message: 'Copied to clipboard'));
-    emit(state.copyWith(message: ''));
   }
 
   Future<void> _onTextChange(
@@ -256,5 +258,45 @@ class NotesOverviewBloc extends Bloc<NotesOverviewEvent, NotesOverviewState> {
         filteredNotes: filteredNotes,
       ),
     );
+  }
+
+  Future<void> _onExport(
+    NotesOverviewExport event,
+    Emitter<NotesOverviewState> emit,
+  ) async {
+    final now = DateTime.now();
+    final timeStamp = '${now.year}-${now.month}-${now.day}';
+    final fileName = 'notes_export_$timeStamp.csv';
+    String? filePath = await FilePicker.platform.saveFile(
+      dialogTitle: 'Select a folder to export csv with notes',
+      fileName: fileName,
+      bytes: Uint8List(
+          0), //https://github.com/miguelpruivo/flutter_file_picker/issues/1523
+    );
+    if (filePath == null) return;
+
+    await _notesRepository.exportNotes(filePath).run();
+    emit(state.copyWith(message: 'Notes were exported to $filePath'));
+  }
+
+  Future<void> _onImport(
+    NotesOverviewImport event,
+    Emitter<NotesOverviewState> emit,
+  ) async {
+    final filePaths = await FilePicker.platform.pickFiles(
+      dialogTitle: 'Select a folder to export csv with notes',
+      type: FileType.custom,
+      allowedExtensions: ['csv'],
+    );
+    if (filePaths == null) return;
+
+    final filePath = filePaths.paths[0];
+    if (filePath == null) {
+      emit(state.copyWith(message: 'File path is empty'));
+      return;
+    }
+
+    await _notesRepository.importNotes(filePath).run();
+    emit(state.copyWith(message: 'Notes were imported'));
   }
 }

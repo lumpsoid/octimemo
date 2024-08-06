@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'dart:convert';
+import 'dart:io';
 
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:fpdart/fpdart.dart';
@@ -74,6 +76,30 @@ class NoteSqfliteApi {
           whereArgs: [noteId],
         );
         _notes.add(_notes.value.removeWhere((note) => note.id == noteId));
+      });
+
+  Task<void> exportNotes(String filePath) => Task(() async {
+        final result = _notes.value;
+        final notes = List<String>.generate(result.length, (index) {
+          final note = result[index];
+          return note.toCsv();
+        });
+        await File(filePath).writeAsBytes(
+          utf8.encode(notes.join()),
+          flush: true,
+        );
+      });
+
+  Task<void> importNotes(String filePath) => Task(() async {
+        final result = await File(filePath).readAsString();
+        final notesImported =
+            result.trim().split('\n').map(Note.fromCsv).toIList();
+        // safe  measure, filter only unique notes
+        // which is not in the app now
+        final notes = notesImported.difference(
+            Eq.eqInt.contramap<Note>((n) => n.id), _notes.value);
+        _notes.add(_notes.value.addAll(notes));
+        notes.forEach((el) => insertNote(el).run());
       });
 
   Future<void> initializeDb() async {

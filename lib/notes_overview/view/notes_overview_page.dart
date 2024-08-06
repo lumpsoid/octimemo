@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:memocti/notes_overview/notes_overview.dart';
+import 'package:memocti/notes_overview/widgets/options_menu.dart';
 import 'package:notes_repository/notes_repository.dart';
 
 class NotesOverviewPage extends StatelessWidget {
@@ -14,7 +15,8 @@ class NotesOverviewPage extends StatelessWidget {
       child: MultiBlocListener(
         listeners: [
           BlocListener<NotesOverviewBloc, NotesOverviewState>(
-            listenWhen: (previous, current) => current.message.isNotEmpty,
+            listenWhen: (previous, current) =>
+                previous.message != current.message,
             listener: (context, state) {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
@@ -84,6 +86,7 @@ class NotesOverviewScreen extends StatelessWidget {
         actions: const [
           DatePickerButton(),
           SearchButton(),
+          OptionsMenu(),
         ],
       ),
       body: SafeArea(

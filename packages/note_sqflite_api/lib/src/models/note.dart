@@ -31,6 +31,16 @@ class Note extends Equatable {
           dateCreated: map['date_created'] as int,
           dateModified: map['date_modified'] as int,
         );
+  factory Note.fromCsv(String line) {
+    //'$id,$body,$dateCreated,$dateModified';
+    final lineSplited = line.split(',');
+    return Note(
+      id: int.parse(lineSplited[0]),
+      body: lineSplited[1],
+      dateCreated: int.parse(lineSplited[2]),
+      dateModified: int.parse(lineSplited[3]),
+    );
+  }
 
   /// The unique identifier for the book.
   ///
@@ -56,6 +66,10 @@ class Note extends Equatable {
       'date_created': dateCreated,
       'date_modified': dateModified,
     };
+  }
+
+  String toCsv() {
+    return '$id,$body,$dateCreated,$dateModified\n';
   }
 
   String getDateCreatedFormatted() {
