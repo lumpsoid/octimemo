@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:fpdart/fpdart.dart';
+import 'package:memocti/notes_overview/notes_overview.dart';
 import 'package:notes_repository/notes_repository.dart';
 
 part 'notes_overview_event.dart';
@@ -47,7 +48,7 @@ class NotesOverviewBloc extends Bloc<NotesOverviewEvent, NotesOverviewState> {
       ),
       onError: (error, stackTrace) => state.copyWith(
         status: NotesOverviewStatus.error,
-        message: error.toString(),
+        message: UniqueNotification(error.toString()),
       ),
     );
   }
@@ -59,7 +60,7 @@ class NotesOverviewBloc extends Bloc<NotesOverviewEvent, NotesOverviewState> {
     await Clipboard.setData(
       ClipboardData(text: event.text),
     );
-    emit(state.copyWith(message: 'Copied to clipboard'));
+    emit(state.copyWith(message: UniqueNotification('Copied to clipboard')));
   }
 
   Future<void> _onTextChange(
@@ -264,7 +265,13 @@ class NotesOverviewBloc extends Bloc<NotesOverviewEvent, NotesOverviewState> {
     if (filePath == null) return;
 
     await _notesRepository.exportNotes(filePath).run();
-    emit(state.copyWith(message: 'Notes were exported to $filePath'));
+    emit(
+      state.copyWith(
+        message: UniqueNotification(
+          'Notes were exported to $filePath',
+        ),
+      ),
+    );
   }
 
   Future<void> _onImport(
@@ -280,11 +287,11 @@ class NotesOverviewBloc extends Bloc<NotesOverviewEvent, NotesOverviewState> {
 
     final filePath = filePaths.paths[0];
     if (filePath == null) {
-      emit(state.copyWith(message: 'File path is empty'));
+      emit(state.copyWith(message: UniqueNotification('File path is empty')));
       return;
     }
 
     await _notesRepository.importNotes(filePath).run();
-    emit(state.copyWith(message: 'Notes were imported'));
+    emit(state.copyWith(message: UniqueNotification('Notes were imported')));
   }
 }

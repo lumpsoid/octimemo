@@ -6,7 +6,7 @@ final class NotesOverviewState extends Equatable {
   const NotesOverviewState({
     this.status = NotesOverviewStatus.loading,
     this.notes = const IList<Note>.empty(),
-    this.message = '',
+    this.message = const UniqueNotification.empty(),
     this.lastDeletedNote = const Note.empty(),
     this.inputField = '',
     this.isDarkTheme = false,
@@ -21,7 +21,7 @@ final class NotesOverviewState extends Equatable {
   final IList<Note> notes;
   final int editingNoteId;
   final Note lastDeletedNote;
-  final String message;
+  final UniqueNotification message;
   final String inputField;
   final bool isDarkTheme;
   final IList<Note> filteredNotes;
@@ -33,7 +33,7 @@ final class NotesOverviewState extends Equatable {
     NotesOverviewStatus? status,
     IList<Note>? notes,
     Note? lastDeletedNote,
-    String? message,
+    UniqueNotification? message,
     String? inputField,
     int? editingNoteId,
     IList<Note>? filteredNotes,

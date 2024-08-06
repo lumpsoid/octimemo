@@ -22,7 +22,7 @@ class NotesOverviewPage extends StatelessWidget {
                 SnackBar(
                   width: double.infinity,
                   content: Text(
-                    state.message,
+                    state.message.value,
                     style: const TextStyle(
                       fontSize: 18.0,
                     ),
