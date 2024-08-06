@@ -1,4 +1,4 @@
-package com.boldballs.simple_memos
+package com.lumpsoid.octimemo
 
 import io.flutter.embedding.android.FlutterActivity
 
