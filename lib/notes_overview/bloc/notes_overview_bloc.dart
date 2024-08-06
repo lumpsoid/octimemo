@@ -25,6 +25,8 @@ class NotesOverviewBloc extends Bloc<NotesOverviewEvent, NotesOverviewState> {
     on<NotesOverviewSearchStart>(_onSearchStart);
     on<NotesOverviewSearchEnd>(_onSearchEnd);
     on<NotesOverviewSearchQuery>(_onSearchQuery);
+    on<NotesOverviewNoteRestore>(_onNoteRestore);
+    on<NotesOverviewNoteDeleteCompletely>(_onNoteDeleteCompletely);
   }
 
   final NotesRepository _notesRepository;
@@ -92,7 +94,38 @@ class NotesOverviewBloc extends Bloc<NotesOverviewEvent, NotesOverviewState> {
         ),
       );
     }
+    emit(
+      state.copyWith(
+        lastDeletedNote: state.notes.firstWhere(
+          (el) => el.id == event.id,
+        ),
+      ),
+    );
     await _notesRepository.deleteNote(event.id).run();
+  }
+
+  Future<void> _onNoteRestore(
+    NotesOverviewNoteRestore event,
+    Emitter<NotesOverviewState> emit,
+  ) async {
+    await _notesRepository
+        .insertNote(
+          state.lastDeletedNote.copyWith(
+            id: DateTime.now().millisecondsSinceEpoch,
+          ),
+        )
+        .run();
+  }
+
+  Future<void> _onNoteDeleteCompletely(
+    NotesOverviewNoteDeleteCompletely event,
+    Emitter<NotesOverviewState> emit,
+  ) async {
+    emit(
+      state.copyWith(
+        lastDeletedNote: const Note.empty(),
+      ),
+    );
   }
 
   Future<void> _onNoteUpdate(

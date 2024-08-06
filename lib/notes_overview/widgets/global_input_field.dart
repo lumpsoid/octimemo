@@ -36,10 +36,23 @@ class _GlobalInputFieldState extends State<GlobalInputField> {
         BlocListener<NotesOverviewBloc, NotesOverviewState>(
           listenWhen: (previous, current) =>
               previous != current && current.editingNoteId != 0,
-          listener: (context, state) {
-            FocusScope.of(context).requestFocus(_focusNode);
-            _controller.text =
-                context.read<NotesOverviewBloc>().state.inputField;
+          listener: (context, state) async {
+            setUpField() {
+              _controller.text =
+                  context.read<NotesOverviewBloc>().state.inputField;
+              FocusScope.of(context).requestFocus(_focusNode);
+            }
+
+            if (View.of(context).viewInsets.bottom == 0.0) {
+              _focusNode.unfocus();
+              debugPrint('unfocus?');
+              Future.delayed(
+                const Duration(microseconds: 1),
+                setUpField,
+              );
+            } else {
+              setUpField();
+            }
           },
         ),
       ],
@@ -48,63 +61,71 @@ class _GlobalInputFieldState extends State<GlobalInputField> {
           return state.editingNoteId != 0;
         },
         builder: (context, isEditing) {
-          return TextFormField(
-            controller: _controller,
-            focusNode: _focusNode,
-            maxLines: null,
-            onChanged: (value) => context.read<NotesOverviewBloc>().add(
-                  NotesOverviewInputFieldChanged(value),
-                ),
-            decoration: InputDecoration(
-              hintText: 'Enter your note...',
-              border: const OutlineInputBorder(),
-              prefixIcon: isEditing
-                  ? IconButton(
-                      onPressed: () {
-                        _controller.clear();
-                        context.read<NotesOverviewBloc>().add(
-                              const NotesOverviewNoteEditCancel(),
-                            );
-                      },
-                      icon: const Icon(Icons.cancel_outlined),
-                    )
-                  : null,
-              suffixIcon: IconButton(
-                  onPressed: () {
-                    if (_controller.text.isEmpty) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: const Text(
-                            'Text field is empty.',
-                            style: TextStyle(
-                              fontSize: 18.0,
+          return Container(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            decoration: const BoxDecoration(
+              border: Border(
+                top: BorderSide(width: 1.0, color: Colors.grey), // Top border
+              ),
+            ),
+            child: TextFormField(
+              controller: _controller,
+              focusNode: _focusNode,
+              maxLines: null,
+              onChanged: (value) => context.read<NotesOverviewBloc>().add(
+                    NotesOverviewInputFieldChanged(value),
+                  ),
+              decoration: InputDecoration(
+                hintText: 'Enter your note...',
+                border: InputBorder.none,
+                prefixIcon: isEditing
+                    ? IconButton(
+                        onPressed: () {
+                          _controller.clear();
+                          context.read<NotesOverviewBloc>().add(
+                                const NotesOverviewNoteEditCancel(),
+                              );
+                        },
+                        icon: const Icon(Icons.cancel_outlined),
+                      )
+                    : null,
+                suffixIcon: IconButton(
+                    onPressed: () {
+                      if (_controller.text.isEmpty) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: const Text(
+                              'Text field is empty.',
+                              style: TextStyle(
+                                fontSize: 18.0,
+                              ),
+                            ),
+                            duration: const Duration(milliseconds: 1500),
+                            width: 280.0, // Width of the SnackBar.
+                            padding: const EdgeInsets.symmetric(
+                              horizontal:
+                                  8.0, // Inner padding for SnackBar content.
+                            ),
+                            behavior: SnackBarBehavior.floating,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10.0),
                             ),
                           ),
-                          duration: const Duration(milliseconds: 1500),
-                          width: 280.0, // Width of the SnackBar.
-                          padding: const EdgeInsets.symmetric(
-                            horizontal:
-                                8.0, // Inner padding for SnackBar content.
-                          ),
-                          behavior: SnackBarBehavior.floating,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10.0),
-                          ),
-                        ),
-                      );
-                    }
-                    _controller.clear();
-                    if (isEditing) {
-                      context.read<NotesOverviewBloc>().add(
-                            const NotesOverviewNoteUpdate(),
-                          );
-                    } else {
-                      context.read<NotesOverviewBloc>().add(
-                            const NotesOverviewNoteAdd(),
-                          );
-                    }
-                  },
-                  icon: const Icon(Icons.send)),
+                        );
+                      }
+                      _controller.clear();
+                      if (isEditing) {
+                        context.read<NotesOverviewBloc>().add(
+                              const NotesOverviewNoteUpdate(),
+                            );
+                      } else {
+                        context.read<NotesOverviewBloc>().add(
+                              const NotesOverviewNoteAdd(),
+                            );
+                      }
+                    },
+                    icon: const Icon(Icons.send)),
+              ),
             ),
           );
         },

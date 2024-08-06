@@ -11,29 +11,62 @@ class NotesOverviewPage extends StatelessWidget {
       create: (context) => NotesOverviewBloc(
         notesRepository: context.read<NotesRepository>(),
       )..add(const NotesOverviewSubscriptionRequest()),
-      child: BlocListener<NotesOverviewBloc, NotesOverviewState>(
-        listenWhen: (previous, current) => current.message.isNotEmpty,
-        listener: (context, state) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(
-                state.message,
-                style: const TextStyle(
-                  fontSize: 18.0,
+      child: MultiBlocListener(
+        listeners: [
+          BlocListener<NotesOverviewBloc, NotesOverviewState>(
+            listenWhen: (previous, current) => current.message.isNotEmpty,
+            listener: (context, state) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(
+                    state.message,
+                    style: const TextStyle(
+                      fontSize: 18.0,
+                    ),
+                  ),
+                  duration: const Duration(milliseconds: 1500),
+                  width: 280.0, // Width of the SnackBar.
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8.0, // Inner padding for SnackBar content.
+                  ),
+                  behavior: SnackBarBehavior.floating,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
                 ),
-              ),
-              duration: const Duration(milliseconds: 1500),
-              width: 280.0, // Width of the SnackBar.
-              padding: const EdgeInsets.symmetric(
-                horizontal: 8.0, // Inner padding for SnackBar content.
-              ),
-              behavior: SnackBarBehavior.floating,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10.0),
-              ),
-            ),
-          );
-        },
+              );
+            },
+          ),
+          BlocListener<NotesOverviewBloc, NotesOverviewState>(
+            listenWhen: (previous, current) =>
+                previous.lastDeletedNote != current.lastDeletedNote,
+            listener: (context, state) {
+              final messenger = ScaffoldMessenger.of(context);
+              messenger
+                ..hideCurrentSnackBar()
+                ..showSnackBar(
+                  SnackBar(
+                    width: double.infinity,
+                    duration: const Duration(milliseconds: 1500),
+                    content: const Text(
+                      'Note was deleted',
+                      style: TextStyle(
+                        fontSize: 18.0,
+                      ),
+                    ),
+                    action: SnackBarAction(
+                      label: 'Undo',
+                      onPressed: () {
+                        context.read<NotesOverviewBloc>().add(
+                              const NotesOverviewNoteRestore(),
+                            );
+                      },
+                    ),
+                  ),
+                );
+            },
+          ),
+        ],
         child: const NotesOverviewScreen(),
       ),
     );

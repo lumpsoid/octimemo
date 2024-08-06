@@ -37,6 +37,14 @@ final class NotesOverviewNoteEdit extends NotesOverviewEvent {
   List<Object> get props => [note];
 }
 
+final class NotesOverviewNoteRestore extends NotesOverviewEvent {
+  const NotesOverviewNoteRestore();
+}
+
+final class NotesOverviewNoteDeleteCompletely extends NotesOverviewEvent {
+  const NotesOverviewNoteDeleteCompletely();
+}
+
 final class NotesOverviewNoteEditCancel extends NotesOverviewEvent {
   const NotesOverviewNoteEditCancel();
 }
