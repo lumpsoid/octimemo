@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:memocti/notes_overview/view/notes_overview_page.dart';
+import 'package:octimemo/notes_overview/view/notes_overview_page.dart';
 import 'package:notes_repository/notes_repository.dart';
-import 'package:memocti/theme/theme.dart';
+import 'package:octimemo/theme/theme.dart';
 
 class App extends StatelessWidget {
   const App({required this.notesRepository, super.key});

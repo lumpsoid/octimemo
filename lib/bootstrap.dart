@@ -4,8 +4,8 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:note_sqflite_api/note_sqflite_api.dart';
-import 'package:memocti/app/app.dart';
-import 'package:memocti/app/app_bloc_observer.dart';
+import 'package:octimemo/app/app.dart';
+import 'package:octimemo/app/app_bloc_observer.dart';
 import 'package:notes_repository/notes_repository.dart';
 
 void bootstrap({

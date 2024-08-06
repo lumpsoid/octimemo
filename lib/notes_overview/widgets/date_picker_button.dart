@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:memocti/notes_overview/notes_overview.dart';
+import 'package:octimemo/notes_overview/notes_overview.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class DatePickerButton extends StatelessWidget {

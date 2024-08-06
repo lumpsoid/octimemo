@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:memocti/notes_overview/notes_overview.dart';
-import 'package:memocti/notes_overview/widgets/options_menu.dart';
+import 'package:octimemo/notes_overview/notes_overview.dart';
+import 'package:octimemo/notes_overview/widgets/options_menu.dart';
 import 'package:notes_repository/notes_repository.dart';
 
 class NotesOverviewPage extends StatelessWidget {

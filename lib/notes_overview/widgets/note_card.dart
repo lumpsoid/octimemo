@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:memocti/notes_overview/bloc/notes_overview_bloc.dart';
-import 'package:memocti/notes_overview/notes_overview.dart';
+import 'package:octimemo/notes_overview/bloc/notes_overview_bloc.dart';
+import 'package:octimemo/notes_overview/notes_overview.dart';
 import 'package:note_sqflite_api/note_sqflite_api.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

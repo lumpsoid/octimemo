@@ -4,7 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:fpdart/fpdart.dart';
-import 'package:memocti/notes_overview/notes_overview.dart';
+import 'package:octimemo/notes_overview/notes_overview.dart';
 import 'package:notes_repository/notes_repository.dart';
 
 part 'notes_overview_event.dart';
