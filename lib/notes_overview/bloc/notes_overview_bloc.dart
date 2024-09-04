@@ -112,9 +112,7 @@ class NotesOverviewBloc extends Bloc<NotesOverviewEvent, NotesOverviewState> {
   ) async {
     await _notesRepository
         .insertNote(
-          state.lastDeletedNote.copyWith(
-            id: DateTime.now().millisecondsSinceEpoch,
-          ),
+          state.lastDeletedNote.rotateId(),
         )
         .run();
   }
@@ -172,13 +170,12 @@ class NotesOverviewBloc extends Bloc<NotesOverviewEvent, NotesOverviewState> {
     Emitter<NotesOverviewState> emit,
   ) async {
     final pickedDate = event.datePicked;
-    final filteredNotes = state.notes.retainWhere((note) =>
-        DateTime.fromMillisecondsSinceEpoch(note.dateCreated)
-            .eqvYearMonthDay(pickedDate));
+    final filteredNotes = state.notes.retainWhere(
+        (note) => note.getDateCreated().eqvYearMonthDay(pickedDate));
     emit(
       state.copyWith(
         filteredNotes: filteredNotes,
-        datePicked: pickedDate.millisecondsSinceEpoch,
+        datePicked: pickedDate.microsecondsSinceEpoch,
       ),
     );
   }
@@ -225,11 +222,10 @@ class NotesOverviewBloc extends Bloc<NotesOverviewEvent, NotesOverviewState> {
     final query = event.query;
     late IList<Note> filteredNotes;
     if (state.datePicked != 0) {
-      final datePicked = DateTime.fromMillisecondsSinceEpoch(state.datePicked);
+      final datePicked = DateTime.fromMicrosecondsSinceEpoch(state.datePicked);
 
       filteredNotes = state.notes.retainWhere((note) {
-        final sameDate = DateTime.fromMillisecondsSinceEpoch(note.dateCreated)
-            .eqvYearMonthDay(datePicked);
+        final sameDate = note.getDateCreated().eqvYearMonthDay(datePicked);
         final containsQuery = note.body.toLowerCase().contains(
               query.toLowerCase(),
             );

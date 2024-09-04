@@ -8,6 +8,10 @@ class Note extends Equatable {
     required this.dateModified,
   });
 
+  static int newId() {
+    return DateTime.now().microsecondsSinceEpoch;
+  }
+
   const Note.empty()
       : this(
           id: 0,
@@ -18,10 +22,10 @@ class Note extends Equatable {
 
   Note.fromBody(String body)
       : this(
-          id: DateTime.now().millisecondsSinceEpoch,
+          id: Note.newId(),
           body: body,
-          dateCreated: DateTime.now().millisecondsSinceEpoch,
-          dateModified: DateTime.now().millisecondsSinceEpoch,
+          dateCreated: Note.newId(),
+          dateModified: Note.newId(),
         );
 
   Note.fromDb(Map<String, dynamic> map)
@@ -51,10 +55,10 @@ class Note extends Equatable {
   /// The text content of the note.
   final String body;
 
-  /// The date the note was created in milliseconds since epoch.
+  /// The date the note was created in microseconds since epoch.
   final int dateCreated;
 
-  /// The date the note was last time modified in milliseconds since epoch.
+  /// The date the note was last time modified in microseconds since epoch.
   final int dateModified;
 
   bool get isEmpty => id == 0;
@@ -72,9 +76,22 @@ class Note extends Equatable {
     return '$id,$body,$dateCreated,$dateModified\n';
   }
 
+  DateTime getDateCreated() {
+    return DateTime.fromMicrosecondsSinceEpoch(dateCreated);
+  }
+
   String getDateCreatedFormatted() {
-    final noteTimeCreated = DateTime.fromMillisecondsSinceEpoch(dateCreated);
+    final noteTimeCreated = DateTime.fromMicrosecondsSinceEpoch(dateCreated);
     return '${noteTimeCreated.year}-${noteTimeCreated.month}-${noteTimeCreated.day} ${noteTimeCreated.hour}:${noteTimeCreated.minute}';
+  }
+
+  Note rotateId() {
+    return Note(
+      id: Note.newId(),
+      body: body,
+      dateCreated: dateCreated,
+      dateModified: dateModified,
+    );
   }
 
   Note copyWith({
