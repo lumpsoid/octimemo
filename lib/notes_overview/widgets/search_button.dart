@@ -9,18 +9,12 @@ class SearchButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<NotesOverviewBloc, NotesOverviewState>(
         builder: (context, state) {
-      return state.searchStatus
-          ? IconButton(
-              onPressed: () => context.read<NotesOverviewBloc>().add(
-                    const NotesOverviewSearchEnd(),
-                  ),
-              icon: const Icon(Icons.search_off))
-          : IconButton(
-              onPressed: () => context
-                  .read<NotesOverviewBloc>()
-                  .add(const NotesOverviewSearchStart()),
-              icon: const Icon(Icons.search),
-            );
+      return IconButton(
+        onPressed: () => context
+            .read<NotesOverviewBloc>()
+            .add(const NotesOverviewSearchStart()),
+        icon: const Icon(Icons.search),
+      );
     });
   }
 }

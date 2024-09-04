@@ -8,6 +8,7 @@ class OptionsMenu extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PopupMenuButton<String>(
+      icon: const Icon(Icons.menu),
       itemBuilder: (BuildContext context) {
         return [
           PopupMenuItem<String>(

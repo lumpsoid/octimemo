@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:octimemo/notes_overview/notes_overview.dart';
-import 'package:octimemo/notes_overview/widgets/options_menu.dart';
+import 'package:octimemo/notes_overview/widgets/action_row.dart';
 import 'package:notes_repository/notes_repository.dart';
 
 class NotesOverviewPage extends StatelessWidget {
@@ -72,21 +72,21 @@ class NotesOverviewScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const OverviewTitle(),
-        actions: const [
-          DatePickerButton(),
-          SearchButton(),
-          OptionsMenu(),
-        ],
-      ),
       body: SafeArea(
         child: BlocBuilder<NotesOverviewBloc, NotesOverviewState>(
           builder: (context, state) {
-            if (state.datePicked != 0 || state.searchStatus) {
-              return const NotesFilteredList();
+            if (state.status == NotesOverviewStatus.loading) {
+              return const Center(child: CircularProgressIndicator());
             }
-            return const NotesList();
+            return const Column(
+              children: [
+                Expanded(
+                  child: NotesList(),
+                ),
+                ActionRowOrFilter(),
+                GlobalInputField(),
+              ],
+            );
           },
         ),
       ),

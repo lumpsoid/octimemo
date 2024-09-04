@@ -59,59 +59,28 @@ class NoteCard extends StatelessWidget {
           }
         },
         key: Key(note.id.toString()),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              note.getDateCreatedFormatted(),
-              style: const TextStyle(
-                fontSize: 12.0,
-                color: Colors.grey,
+        child: InkWell(
+          onLongPress: () => context.read<NotesOverviewBloc>().add(
+                NotesOverviewToClipboard(note.body),
               ),
-            ),
-            Text(
-              note.body,
-              style: const TextStyle(fontSize: 16.0),
-            ),
-          ],
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                note.getDateCreatedFormatted(),
+                style: const TextStyle(
+                  fontSize: 12.0,
+                  color: Colors.grey,
+                ),
+              ),
+              Text(
+                note.body,
+                style: const TextStyle(fontSize: 16.0),
+              ),
+            ],
+          ),
         ),
       ),
-    );
-  }
-
-  void _showMenu(BuildContext context, LongPressStartDetails details) {
-    final overlay = Overlay.of(context).context.findRenderObject();
-    if (overlay == null) {
-      return;
-    }
-    showMenu(
-      context: context,
-      position: RelativeRect.fromRect(
-        details.globalPosition &
-            const Size(40, 40), // smaller rect, the touch area
-        Offset.zero & overlay.semanticBounds.size,
-      ),
-      shape: Border.all(color: Theme.of(context).focusColor),
-      items: [
-        PopupMenuItem(
-          child: const Text('Copy'),
-          onTap: () {
-            context.read<NotesOverviewBloc>().add(
-                  NotesOverviewToClipboard(note.body),
-                );
-          },
-        ),
-        PopupMenuItem(
-          child: const Text('Delete'),
-          onTap: () {
-            context.read<NotesOverviewBloc>().add(
-                  NotesOverviewNoteDelete(
-                    note.id,
-                  ),
-                );
-          },
-        ),
-      ],
     );
   }
 }

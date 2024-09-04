@@ -14,7 +14,7 @@ class DatePickerButton extends StatelessWidget {
               onPressed: () => context.read<NotesOverviewBloc>().add(
                     const NotesOverviewDatePickEnd(),
                   ),
-              icon: const Icon(Icons.calendar_today_outlined))
+              icon: const Icon(Icons.event_busy))
           : IconButton(
               icon: const Icon(Icons.calendar_month),
               padding: const EdgeInsets.fromLTRB(8.0, 0.0, 20.0, 0.0),
