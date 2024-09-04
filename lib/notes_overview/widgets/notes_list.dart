@@ -17,21 +17,33 @@ class NotesList extends StatelessWidget {
           notes = state.filteredNotes;
         } else {
           notes = state.notes;
-        } 
+        }
 
         if (notes.isEmpty) {
           return const Center(child: Text('No notes'));
         }
 
-        return ListView.builder(
+        final height = MediaQuery.of(context).size.height;
+        return CustomScrollView(
           reverse: true,
-          itemCount: notes.length,
-          itemBuilder: (context, index) {
-            final reversedIndex = notes.length - 1 - index;
-            return NoteCard(
-              note: notes[reversedIndex],
-            );
-          },
+          slivers: [
+            SliverList(
+              delegate: SliverChildBuilderDelegate(
+                (context, index) {
+                  final reversedIndex = notes.length - 1 - index;
+                  return NoteCard(
+                    note: notes[reversedIndex],
+                  );
+                },
+                childCount: notes.length,
+              ),
+            ),
+            SliverToBoxAdapter(
+              child: SizedBox(
+                height: height / 2,
+              ),
+            ),
+          ],
         );
       },
     );
