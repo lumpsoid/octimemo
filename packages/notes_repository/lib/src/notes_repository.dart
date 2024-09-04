@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:note_sqflite_api/note_sqflite_api.dart';
@@ -47,6 +49,10 @@ class NotesRepository {
       _localApi.exportNotes(
         filePath,
       );
+
+  Task<Uint8List> getNotesAsString() =>
+      _localApi.getNotesAsString();
+
   Task<void> importNotes(
     String filePath,
   ) =>

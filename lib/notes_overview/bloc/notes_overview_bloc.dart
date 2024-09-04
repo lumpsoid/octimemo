@@ -249,22 +249,25 @@ class NotesOverviewBloc extends Bloc<NotesOverviewEvent, NotesOverviewState> {
     NotesOverviewExport event,
     Emitter<NotesOverviewState> emit,
   ) async {
+    final notesData = _notesRepository.getNotesAsString().run();
+
     final now = DateTime.now();
     final timeStamp = '${now.year}-${now.month}-${now.day}';
-    final fileName = 'notes_export_$timeStamp.csv';
+    final fileName = 'notes_export_$timeStamp.json';
+
     String? filePath = await FilePicker.platform.saveFile(
       dialogTitle: 'Select a folder to export csv with notes',
       fileName: fileName,
-      bytes: Uint8List(
-          0), //https://github.com/miguelpruivo/flutter_file_picker/issues/1523
+      initialDirectory: 'Download',
+      bytes: await notesData, //https://github.com/miguelpruivo/flutter_file_picker/issues/1523
     );
     if (filePath == null) return;
 
-    await _notesRepository.exportNotes(filePath).run();
+    //await _notesRepository.exportNotes(filePath).run();
     emit(
       state.copyWith(
         message: UniqueNotification(
-          'Notes were exported to $filePath',
+          'Notes were exported',
         ),
       ),
     );
@@ -275,9 +278,9 @@ class NotesOverviewBloc extends Bloc<NotesOverviewEvent, NotesOverviewState> {
     Emitter<NotesOverviewState> emit,
   ) async {
     final filePaths = await FilePicker.platform.pickFiles(
-      dialogTitle: 'Select a folder to export csv with notes',
+      dialogTitle: 'Select the notes backup to import',
       type: FileType.custom,
-      allowedExtensions: ['csv'],
+      allowedExtensions: ['json'],
     );
     if (filePaths == null) return;
 
@@ -287,7 +290,11 @@ class NotesOverviewBloc extends Bloc<NotesOverviewEvent, NotesOverviewState> {
       return;
     }
 
-    await _notesRepository.importNotes(filePath).run();
-    emit(state.copyWith(message: UniqueNotification('Notes were imported')));
+    try {
+      await _notesRepository.importNotes(filePath).run();
+      emit(state.copyWith(message: UniqueNotification('Notes were imported')));
+    } catch (e) {
+      emit(state.copyWith(message: UniqueNotification(e.toString())));
+    }
   }
 }

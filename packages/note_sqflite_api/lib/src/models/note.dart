@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:equatable/equatable.dart';
+import 'package:flutter/rendering.dart';
 
 class Note extends Equatable {
   const Note({
@@ -35,14 +38,13 @@ class Note extends Equatable {
           dateCreated: map['date_created'] as int,
           dateModified: map['date_modified'] as int,
         );
-  factory Note.fromCsv(String line) {
-    //'$id,$body,$dateCreated,$dateModified';
-    final lineSplited = line.split(',');
+  // Create a Note instance from a JSON string
+  factory Note.fromJson(Map<String, dynamic> noteJson) {
     return Note(
-      id: int.parse(lineSplited[0]),
-      body: lineSplited[1],
-      dateCreated: int.parse(lineSplited[2]),
-      dateModified: int.parse(lineSplited[3]),
+      id: noteJson['id'],
+      body: noteJson['body'],
+      dateCreated: noteJson['dateCreated'],
+      dateModified: noteJson['dateModified'],
     );
   }
 
@@ -72,8 +74,15 @@ class Note extends Equatable {
     };
   }
 
-  String toCsv() {
-    return '$id,$body,$dateCreated,$dateModified\n';
+  // Convert Note instance to JSON string
+  String toJson() {
+    final jsonMap = {
+      'id': id,
+      'body': body,
+      'dateCreated': dateCreated,
+      'dateModified': dateModified,
+    };
+    return jsonEncode(jsonMap);
   }
 
   DateTime getDateCreated() {

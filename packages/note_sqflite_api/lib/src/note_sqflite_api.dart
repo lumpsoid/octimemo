@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:fpdart/fpdart.dart';
@@ -94,28 +96,51 @@ class NoteSqfliteApi {
 
   Task<void> exportNotes(String filePath) => Task(() async {
         final result = _notes.value;
-        final notes = List<String>.generate(result.length, (index) {
-          final note = result[index];
-          return note.toCsv();
-        });
-        await File(filePath).writeAsBytes(
-          utf8.encode(notes.join()),
+
+        // Convert list of notes to a list of maps
+        final notesList = result.map((note) => note.toJson()).toList();
+
+        // Create a single JSON object containing the list
+        final jsonObject = {'notes': notesList};
+
+        // Convert the JSON object to a JSON string
+        final jsonString = jsonEncode(jsonObject);
+
+        // Write the JSON string to a file
+        await File(filePath).writeAsString(
+          jsonString,
           flush: true,
         );
       });
 
+  Task<Uint8List> getNotesAsString() => Task(() async {
+        final result = _notes.value;
+
+        // Convert list of notes to a list of maps
+        final notesList = result.map((note) => note.toJson()).toList();
+
+        // Create a single JSON object containing the list
+        final jsonObject = {'notes': notesList};
+
+        // Convert the JSON object to a JSON string
+        final jsonString = jsonEncode(jsonObject);
+
+        return utf8.encode(jsonString);
+      });
+
   Task<void> importNotes(String filePath) => Task(() async {
-        final notesOnlyNew = await File(filePath).readAsString().then(
-              (result) => result
-                  .trim()
-                  .split('\n')
-                  .map(Note.fromCsv)
-                  .difference(
-                    Eq.eqInt.contramap<Note>((n) => n.id),
-                    _notes.value,
-                  )
-                  .toIList(),
-            );
+        final fileContent = await File(filePath).readAsString();
+        final jsonObject = jsonDecode(fileContent);
+        final notesList = jsonObject['notes'] as List<dynamic>;
+        final notes = notesList
+            .map((item) => Note.fromJson(jsonDecode(item)))
+            .toList();
+        final notesOnlyNew = notes
+            .difference(
+              Eq.eqInt.contramap<Note>((n) => n.id),
+              _notes.value,
+            )
+            .toIList();
         await insertNotes(notesOnlyNew).run();
       });
 
