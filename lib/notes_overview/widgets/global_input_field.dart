@@ -35,7 +35,9 @@ class _GlobalInputFieldState extends State<GlobalInputField> {
         // Force keyboard to open when a note is being edited
         BlocListener<NotesOverviewBloc, NotesOverviewState>(
           listenWhen: (previous, current) =>
-              previous != current && current.editingNoteId != 0,
+              previous != current &&
+              previous.editingNoteId != current.editingNoteId &&
+              current.editingNoteId != 0,
           listener: (context, state) async {
             setUpField() {
               _controller.text =
