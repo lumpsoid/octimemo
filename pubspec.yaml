@@ -47,6 +47,8 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  flutter_localizations:
+    sdk: flutter
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
@@ -56,8 +58,8 @@ dev_dependencies:
   flutter_lints: ^5.0.0
   test: ^1.24.9
   sqflite_common_ffi: ^2.3.1
-  mockito: ^5.4.5
-  build_runner: ^2.4.14
+  mockito: ^5.4.4
+  build_runner: ^2.4.13
   very_good_analysis: ^7.0.0
 
 # For information on the generic Dart part of this file, see the
