@@ -6,9 +6,6 @@ class NotesTheme {
       colorScheme: ColorScheme.fromSeed(
         seedColor: const Color(0xFF9E6C00),
       ),
-      snackBarTheme: const SnackBarThemeData(
-        behavior: SnackBarBehavior.floating,
-      ),
     );
   }
 
@@ -17,9 +14,6 @@ class NotesTheme {
       colorScheme: ColorScheme.fromSeed(
         brightness: Brightness.dark,
         seedColor: const Color(0xFF9E6C00),
-      ),
-      snackBarTheme: const SnackBarThemeData(
-        behavior: SnackBarBehavior.floating,
       ),
     );
   }
