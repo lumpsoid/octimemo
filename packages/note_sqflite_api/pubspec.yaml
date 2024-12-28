@@ -8,15 +8,15 @@ environment:
   flutter: "^3.19.0"
 
 dependencies:
-  equatable: ^2.0.5
-  fast_immutable_collections: ^10.2.2
+  equatable: ^2.0.7
+  fast_immutable_collections: ^11.0.0
   flutter:
     sdk: flutter
   fpdart: ^1.1.0
-  rxdart: ^0.27.7
-  sqflite: ^2.3.3
+  rxdart: ^0.28.0
+  sqflite: ^2.4.1
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  very_good_analysis: ^5.1.0
+  very_good_analysis: ^7.0.0

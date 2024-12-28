@@ -8,7 +8,7 @@ environment:
   flutter: "^3.19.0"
 
 dependencies:
-  fast_immutable_collections: ^10.2.2
+  fast_immutable_collections: ^11.0.0
   flutter:
     sdk: flutter
   fpdart: ^1.1.0
@@ -18,5 +18,5 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  mocktail: ^1.0.3
-  very_good_analysis: ^5.1.0
+  mocktail: ^1.0.4
+  very_good_analysis: ^7.0.0
