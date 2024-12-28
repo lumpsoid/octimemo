@@ -5,68 +5,30 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "octimemo",
+      "name": "Launch development",
       "request": "launch",
       "type": "dart",
-      "program": "lib/main.dart",
+      "program": "lib/main_development.dart",
+      "args": [
+        "--flavor",
+        "development",
+        "--target",
+        "lib/main_development.dart"
+      ]
     },
     {
-      "name": "octimemo (profile mode)",
+      "name": "Launch staging",
       "request": "launch",
       "type": "dart",
-      "flutterMode": "profile"
+      "program": "lib/main_staging.dart",
+      "args": ["--flavor", "staging", "--target", "lib/main_staging.dart"]
     },
     {
-      "name": "octimemo (release mode)",
+      "name": "Launch production",
       "request": "launch",
       "type": "dart",
-      "flutterMode": "release"
-    },
-    {
-      "name": "local_sqflite_api",
-      "cwd": "packages/local_sqflite_api",
-      "request": "launch",
-      "type": "dart"
-    },
-    {
-      "name": "note_sqflite_api",
-      "cwd": "packages/note_sqflite_api",
-      "request": "launch",
-      "type": "dart"
-    },
-    {
-      "name": "note_sqflite_api (profile mode)",
-      "cwd": "packages/note_sqflite_api",
-      "request": "launch",
-      "type": "dart",
-      "flutterMode": "profile"
-    },
-    {
-      "name": "note_sqflite_api (release mode)",
-      "cwd": "packages/note_sqflite_api",
-      "request": "launch",
-      "type": "dart",
-      "flutterMode": "release"
-    },
-    {
-      "name": "notes_repository",
-      "cwd": "packages/notes_repository",
-      "request": "launch",
-      "type": "dart"
-    },
-    {
-      "name": "notes_repository (profile mode)",
-      "cwd": "packages/notes_repository",
-      "request": "launch",
-      "type": "dart",
-      "flutterMode": "profile"
-    },
-    {
-      "name": "notes_repository (release mode)",
-      "cwd": "packages/notes_repository",
-      "request": "launch",
-      "type": "dart",
-      "flutterMode": "release"
+      "program": "lib/main_production.dart",
+      "args": ["--flavor", "production", "--target", "lib/main_production.dart"]
     }
   ]
 }
