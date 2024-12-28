@@ -6,6 +6,7 @@ class NotesTheme {
       colorScheme: ColorScheme.fromSeed(
         seedColor: const Color(0xFF9E6C00),
       ),
+      iconTheme: IconThemeData(size: 28),
     );
   }
 
@@ -15,6 +16,7 @@ class NotesTheme {
         brightness: Brightness.dark,
         seedColor: const Color(0xFF9E6C00),
       ),
+      iconTheme: IconThemeData(size: 28),
     );
   }
 }
