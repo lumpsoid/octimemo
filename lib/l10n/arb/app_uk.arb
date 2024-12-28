@@ -1,0 +1,13 @@
+{
+    "@@locale": "uk",
+    "overviewNotificationDeleteText": "Нотатку видалено",
+    "overviewNotificationDeleteUndoButton": "Скасувати",
+    "overviewInputSearchHint": "Пошук",
+    "overviewGlobalInputHint": "Введіть вашу нотатку...",
+    "overviewNotificationEmptyText": "Текстове поле порожнє",
+    "overviewNoNotesText": "Немає нотаток",
+    "overviewImportOptionText": "Імпортувати",
+    "overviewExportOptionText": "Експортувати",
+    "overviewTitleText": "Нотатки",
+    "overviewTitleFilteredText": "Відфільтровані нотатки"
+}

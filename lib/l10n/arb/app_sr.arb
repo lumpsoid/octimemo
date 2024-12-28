@@ -1,0 +1,13 @@
+{
+    "@@locale": "sr",
+    "overviewNotificationDeleteText": "Beleška je obrisana",
+    "overviewNotificationDeleteUndoButton": "Poništi",
+    "overviewInputSearchHint": "Pretraga",
+    "overviewGlobalInputHint": "Unesite svoju belešku...",
+    "overviewNotificationEmptyText": "Polje za tekst je prazno",
+    "overviewNoNotesText": "Nema beleški",
+    "overviewImportOptionText": "Uvezi",
+    "overviewExportOptionText": "Izvezi",
+    "overviewTitleText": "Beleške",
+    "overviewTitleFilteredText": "Filtrirane beleške"
+}

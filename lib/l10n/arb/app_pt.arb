@@ -1,0 +1,13 @@
+{
+  "@@locale": "pt",
+  "overviewNotificationDeleteText": "Nota foi excluída",
+  "overviewNotificationDeleteUndoButton": "Desfazer",
+  "overviewInputSearchHint": "Pesquisar",
+  "overviewGlobalInputHint": "Digite sua nota...",
+  "overviewNotificationEmptyText": "Campo de texto está vazio",
+  "overviewNoNotesText": "Sem notas",
+  "overviewImportOptionText": "Importar",
+  "overviewExportOptionText": "Exportar",
+  "overviewTitleText": "Notas",
+  "overviewTitleFilteredText": "Notas Filtradas"
+}

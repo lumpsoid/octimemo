@@ -1,0 +1,13 @@
+{
+    "@@locale": "ko",
+    "overviewNotificationDeleteText": "노트가 삭제되었습니다",
+    "overviewNotificationDeleteUndoButton": "실행 취소",
+    "overviewInputSearchHint": "검색",
+    "overviewGlobalInputHint": "노트를 입력하세요...",
+    "overviewNotificationEmptyText": "텍스트 필드가 비어 있습니다",
+    "overviewNoNotesText": "노트가 없습니다",
+    "overviewImportOptionText": "가져오기",
+    "overviewExportOptionText": "내보내기",
+    "overviewTitleText": "메모",
+    "overviewTitleFilteredText": "필터된 메모"
+}

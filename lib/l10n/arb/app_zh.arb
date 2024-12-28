@@ -1,0 +1,13 @@
+{
+  "@@locale": "zh",
+  "overviewNotificationDeleteText": "笔记已删除",
+  "overviewNotificationDeleteUndoButton": "撤销",
+  "overviewInputSearchHint": "搜索",
+  "overviewGlobalInputHint": "输入你的笔记...",
+  "overviewNotificationEmptyText": "文本字段为空",
+  "overviewNoNotesText": "没有笔记",
+  "overviewImportOptionText": "导入",
+  "overviewExportOptionText": "导出",
+  "overviewTitleText": "笔记",
+  "overviewTitleFilteredText": "筛选笔记"
+}

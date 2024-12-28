@@ -1,0 +1,13 @@
+{
+    "@@locale": "ja",
+    "overviewNotificationDeleteText": "ノートが削除されました",
+    "overviewNotificationDeleteUndoButton": "元に戻す",
+    "overviewInputSearchHint": "検索",
+    "overviewGlobalInputHint": "ノートを入力...",
+    "overviewNotificationEmptyText": "テキストフィールドが空です",
+    "overviewNoNotesText": "ノートがありません",
+    "overviewImportOptionText": "インポート",
+    "overviewExportOptionText": "エクスポート",
+    "overviewTitleText": "メモ",
+    "overviewTitleFilteredText": "フィルタされたメモ"
+}

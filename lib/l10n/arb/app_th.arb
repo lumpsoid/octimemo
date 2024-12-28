@@ -1,0 +1,13 @@
+{
+  "@@locale": "th",
+  "overviewNotificationDeleteText": "บันทึกถูกลบ",
+  "overviewNotificationDeleteUndoButton": "เลิกทำ",
+  "overviewInputSearchHint": "ค้นหา",
+  "overviewGlobalInputHint": "กรอกบันทึกของคุณ...",
+  "overviewNotificationEmptyText": "ช่องข้อความว่างเปล่า",
+  "overviewNoNotesText": "ไม่มีบันทึก",
+  "overviewImportOptionText": "นำเข้า",
+  "overviewExportOptionText": "ส่งออก",
+  "overviewTitleText": "บันทึกย่อ",
+  "overviewTitleFilteredText": "บันทึกย่อที่กรองแล้ว"
+}

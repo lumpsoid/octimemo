@@ -1,0 +1,13 @@
+{
+    "@@locale": "ar",
+    "overviewNotificationDeleteText": "تم حذف الملاحظة",
+    "overviewNotificationDeleteUndoButton": "تراجع",
+    "overviewInputSearchHint": "بحث",
+    "overviewGlobalInputHint": "أدخل ملاحظتك...",
+    "overviewNotificationEmptyText": "حقل النص فارغ",
+    "overviewNoNotesText": "لا توجد ملاحظات",
+    "overviewImportOptionText": "استيراد",
+    "overviewExportOptionText": "تصدير",
+    "overviewTitleText": "ملاحظات",
+    "overviewTitleFilteredText": "ملاحظات مفلترة"
+}

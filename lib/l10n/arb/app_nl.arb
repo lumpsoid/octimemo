@@ -1,0 +1,13 @@
+{
+    "@@locale": "nl",
+    "overviewNotificationDeleteText": "Notitie is verwijderd",
+    "overviewNotificationDeleteUndoButton": "Ongedaan maken",
+    "overviewInputSearchHint": "Zoeken",
+    "overviewGlobalInputHint": "Voer uw notitie in...",
+    "overviewNotificationEmptyText": "Tekstveld is leeg",
+    "overviewNoNotesText": "Geen notities",
+    "overviewImportOptionText": "Importeren",
+    "overviewExportOptionText": "Exporteren",
+    "overviewTitleText": "Notities",
+    "overviewTitleFilteredText": "Gefilterde notities"
+}

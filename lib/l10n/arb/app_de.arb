@@ -1,0 +1,13 @@
+{
+    "@@locale": "de",
+    "overviewNotificationDeleteText": "Notiz wurde gelöscht",
+    "overviewNotificationDeleteUndoButton": "Rückgängig",
+    "overviewInputSearchHint": "Suche",
+    "overviewGlobalInputHint": "Geben Sie Ihre Notiz ein...",
+    "overviewNotificationEmptyText": "Textfeld ist leer",
+    "overviewNoNotesText": "Keine Notizen",
+    "overviewImportOptionText": "Importieren",
+    "overviewExportOptionText": "Exportieren",
+    "overviewTitleText": "Notizen",
+    "overviewTitleFilteredText": "Gefilterte Notizen"
+}

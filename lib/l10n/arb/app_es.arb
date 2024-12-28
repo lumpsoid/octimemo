@@ -1,7 +1,13 @@
 {
     "@@locale": "es",
-    "counterAppBarTitle": "Contador",
-    "@counterAppBarTitle": {
-        "description": "Texto mostrado en la AppBar de la página del contador"
-    }
+    "overviewNotificationDeleteText": "La nota fue eliminada",
+    "overviewNotificationDeleteUndoButton": "Deshacer",
+    "overviewInputSearchHint": "Buscar",
+    "overviewGlobalInputHint": "Introduce tu nota...",
+    "overviewNotificationEmptyText": "El campo de texto está vacío",
+    "overviewNoNotesText": "No hay notas",
+    "overviewImportOptionText": "Importar",
+    "overviewExportOptionText": "Exportar",
+    "overviewTitleText": "Notas",
+    "overviewTitleFilteredText": "Notas filtradas"
 }
