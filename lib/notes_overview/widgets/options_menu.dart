@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:octimemo/l10n/l10n.dart';
 import 'package:octimemo/notes_overview/bloc/notes_overview_bloc.dart';
 
 class OptionsMenu extends StatelessWidget {
@@ -7,13 +8,15 @@ class OptionsMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
+
     return PopupMenuButton<String>(
       icon: const Icon(Icons.menu),
       itemBuilder: (BuildContext context) {
         return [
           PopupMenuItem<String>(
             value: 'import',
-            child: const Text('Import'),
+            child: Text(l10n.overviewImportOptionText),
             onTap: () {
               context.read<NotesOverviewBloc>().add(
                     const NotesOverviewImport(),
@@ -22,7 +25,7 @@ class OptionsMenu extends StatelessWidget {
           ),
           PopupMenuItem<String>(
             value: 'export',
-            child: const Text('Export'),
+            child: Text(l10n.overviewExportOptionText),
             onTap: () {
               context.read<NotesOverviewBloc>().add(
                     const NotesOverviewExport(),

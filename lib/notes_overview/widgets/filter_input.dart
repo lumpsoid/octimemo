@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:octimemo/l10n/l10n.dart';
 import 'package:octimemo/notes_overview/notes_overview.dart';
 
 class FilterInput extends StatelessWidget {
@@ -7,6 +8,8 @@ class FilterInput extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
+
     return BlocBuilder<NotesOverviewBloc, NotesOverviewState>(
       builder: (context, state) {
         return Row(
@@ -25,7 +28,9 @@ class FilterInput extends StatelessWidget {
                 onChanged: (value) => context.read<NotesOverviewBloc>().add(
                       NotesOverviewSearchQuery(value),
                     ),
-                decoration: const InputDecoration(hintText: 'Search'),
+                decoration: InputDecoration(
+                  hintText: l10n.overviewInputSearchHint,
+                ),
               ),
             ),
           ],

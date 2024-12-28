@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:octimemo/l10n/l10n.dart';
 import 'package:octimemo/notes_overview/notes_overview.dart';
 
 class GlobalInputField extends StatefulWidget {
@@ -10,8 +11,15 @@ class GlobalInputField extends StatefulWidget {
 }
 
 class _GlobalInputFieldState extends State<GlobalInputField> {
-  final _focusNode = FocusNode();
-  final _controller = TextEditingController();
+  late FocusNode _focusNode;
+  late TextEditingController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _focusNode = FocusNode();
+    _controller = TextEditingController();
+  }
 
   @override
   void dispose() {
@@ -47,7 +55,6 @@ class _GlobalInputFieldState extends State<GlobalInputField> {
 
             if (View.of(context).viewInsets.bottom == 0.0) {
               _focusNode.unfocus();
-              debugPrint('unfocus?');
               Future.delayed(
                 const Duration(microseconds: 1),
                 setUpField,
@@ -63,6 +70,8 @@ class _GlobalInputFieldState extends State<GlobalInputField> {
           return state.editingNoteId != 0;
         },
         builder: (context, isEditing) {
+          final l10n = context.l10n;
+
           return Container(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             decoration: const BoxDecoration(
@@ -78,7 +87,7 @@ class _GlobalInputFieldState extends State<GlobalInputField> {
                     NotesOverviewInputFieldChanged(value),
                   ),
               decoration: InputDecoration(
-                hintText: 'Enter your note...',
+                hintText: l10n.overviewGlobalInputHint,
                 border: InputBorder.none,
                 prefixIcon: isEditing
                     ? IconButton(
@@ -96,8 +105,8 @@ class _GlobalInputFieldState extends State<GlobalInputField> {
                       if (_controller.text.isEmpty) {
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
-                            content: const Text(
-                              'Text field is empty.',
+                            content: Text(
+                              l10n.overviewNotificationEmptyText,
                               style: TextStyle(
                                 fontSize: 18.0,
                               ),

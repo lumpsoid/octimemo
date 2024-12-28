@@ -1,0 +1,13 @@
+{
+    "@@locale": "ru",
+    "overviewNotificationDeleteText": "Заметка была удалена",
+    "overviewNotificationDeleteUndoButton": "Отменить",
+    "overviewInputSearchHint": "Поиск",
+    "overviewGlobalInputHint": "Введите вашу заметку...",
+    "overviewNotificationEmptyText": "Поле ввода пустое",
+    "overviewNoNotesText": "Нет заметок",
+    "overviewImportOptionText": "Импорт",
+    "overviewExportOptionText": "Экспорт",
+    "overviewTitleText": "Заметки",
+    "overviewTitleFilteredText": "Отфильтрованные заметки"
+}

@@ -2,6 +2,7 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:notes_repository/notes_repository.dart';
+import 'package:octimemo/l10n/l10n.dart';
 import 'package:octimemo/notes_overview/notes_overview.dart';
 
 class NotesList extends StatelessWidget {
@@ -9,6 +10,8 @@ class NotesList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
+
     return BlocBuilder<NotesOverviewBloc, NotesOverviewState>(
       builder: (context, state) {
         IList<Note> notes;
@@ -20,7 +23,11 @@ class NotesList extends StatelessWidget {
         }
 
         if (notes.isEmpty) {
-          return const Center(child: Text('No notes'));
+          return Center(
+            child: Text(
+              l10n.overviewNoNotesText,
+            ),
+          );
         }
 
         final height = MediaQuery.of(context).size.height;

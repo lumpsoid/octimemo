@@ -1,7 +1,13 @@
 {
     "@@locale": "en",
-    "counterAppBarTitle": "Counter",
-    "@counterAppBarTitle": {
-        "description": "Text shown in the AppBar of the Counter Page"
-    }
+    "overviewNotificationDeleteText": "Note was deleted",
+    "overviewNotificationDeleteUndoButton": "Undo",
+    "overviewInputSearchHint": "Search",
+    "overviewGlobalInputHint": "Enter your note...",
+    "overviewNotificationEmptyText": "Text field is empty",
+    "overviewNoNotesText": "No notes",
+    "overviewImportOptionText": "Import",
+    "overviewExportOptionText": "Export",
+    "overviewTitleText": "Memos",
+    "overviewTitleFilteredText": "Filtered Memos"
 }

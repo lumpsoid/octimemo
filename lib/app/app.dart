@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:octimemo/l10n/l10n.dart';
 import 'package:octimemo/notes_overview/view/notes_overview_page.dart';
 import 'package:notes_repository/notes_repository.dart';
 import 'package:octimemo/theme/theme.dart';
@@ -18,6 +19,8 @@ class App extends StatelessWidget {
         theme: NotesTheme.light,
         darkTheme: NotesTheme.dark,
         themeMode: ThemeMode.system,
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
         home: const NotesOverviewPage(),
       ),
     );

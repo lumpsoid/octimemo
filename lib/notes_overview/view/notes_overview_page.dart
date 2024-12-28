@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:octimemo/l10n/l10n.dart';
 import 'package:octimemo/notes_overview/notes_overview.dart';
 import 'package:octimemo/notes_overview/widgets/action_row.dart';
 import 'package:notes_repository/notes_repository.dart';
@@ -8,6 +9,8 @@ class NotesOverviewPage extends StatelessWidget {
   const NotesOverviewPage({super.key});
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
+
     return BlocProvider(
       create: (context) => NotesOverviewBloc(
         notesRepository: context.read<NotesRepository>(),
@@ -41,14 +44,14 @@ class NotesOverviewPage extends StatelessWidget {
                 ..showSnackBar(
                   SnackBar(
                     width: double.infinity,
-                    content: const Text(
-                      'Note was deleted',
+                    content: Text(
+                      l10n.overviewNotificationDeleteText,
                       style: TextStyle(
                         fontSize: 18.0,
                       ),
                     ),
                     action: SnackBarAction(
-                      label: 'Undo',
+                      label: l10n.overviewNotificationDeleteUndoButton,
                       onPressed: () {
                         context.read<NotesOverviewBloc>().add(
                               const NotesOverviewNoteRestore(),
