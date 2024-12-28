@@ -123,6 +123,7 @@ class _GlobalInputFieldState extends State<GlobalInputField> {
                             ),
                           ),
                         );
+                        return;
                       }
                       _controller.clear();
                       if (isEditing) {
