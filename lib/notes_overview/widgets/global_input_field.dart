@@ -30,6 +30,8 @@ class _GlobalInputFieldState extends State<GlobalInputField> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
+
     return MultiBlocListener(
       listeners: [
         // clean the input field when the edited note is deleted
@@ -70,10 +72,8 @@ class _GlobalInputFieldState extends State<GlobalInputField> {
           return state.editingNoteId != 0;
         },
         builder: (context, isEditing) {
-          final l10n = context.l10n;
-
           return Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
+            padding: const EdgeInsets.all(10),
             decoration: const BoxDecoration(
               border: Border(
                 top: BorderSide(width: 1.0, color: Colors.grey), // Top border
