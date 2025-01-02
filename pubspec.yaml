@@ -33,7 +33,7 @@ dependencies:
 
   sqflite: ^2.4.1
   fpdart: ^1.1.0
-  fast_immutable_collections: ^11.0.0
+  fast_immutable_collections: ^11.0.2
   flutter_bloc: ^8.1.5
   rxdart: ^0.28.0
   equatable: ^2.0.7
