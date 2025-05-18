@@ -14,12 +14,16 @@ migrate_working_dir/
 *.iml
 *.ipr
 *.iws
-.idea/
+.idea/*
 
-# The .vscode folder contains launch configuration and tasks you configure in
-# VS Code which you may wish to be included in version control, so this line
-# is commented out by default.
-#.vscode/
+# Visual Studio Code related
+.classpath
+.project
+.settings/
+.vscode/*
+
+# packages file containing multi-root paths
+.packages.generated
 
 # Flutter/Dart/Pub related
 **/doc/api/
@@ -27,9 +31,66 @@ migrate_working_dir/
 .dart_tool/
 .flutter-plugins
 .flutter-plugins-dependencies
+.packages
 .pub-cache/
 .pub/
-/build/
+build/
+flutter_*.png
+linked_*.ds
+unlinked.ds
+unlinked_spec.ds
+.fvm/
+
+# Android related
+**/android/**/gradle-wrapper.jar
+**/android/.gradle
+**/android/captures/
+**/android/local.properties
+**/android/**/GeneratedPluginRegistrant.java
+**/android/key.properties
+**/android/.idea/
+**/android/app/debug
+**/android/app/profile
+**/android/app/release
+*.jks
+
+# iOS/XCode related
+**/ios/**/*.mode1v3
+**/ios/**/*.mode2v3
+**/ios/**/*.moved-aside
+**/ios/**/*.pbxuser
+**/ios/**/*.perspectivev3
+**/ios/**/*sync/
+**/ios/**/.sconsign.dblite
+**/ios/**/.tags*
+**/ios/**/.vagrant/
+**/ios/**/DerivedData/
+**/ios/**/Icon?
+**/ios/**/Pods/
+**/ios/**/.symlinks/
+**/ios/**/profile
+**/ios/**/xcuserdata
+**/ios/.generated/
+**/ios/Flutter/App.framework
+**/ios/Flutter/Flutter.framework
+**/ios/Flutter/Flutter.podspec
+**/ios/Flutter/Generated.xcconfig
+**/ios/Flutter/app.flx
+**/ios/Flutter/app.zip
+**/ios/Flutter/.last_build_id
+**/ios/Flutter/flutter_assets/
+**/ios/Flutter/flutter_export_environment.sh
+**/ios/ServiceDefinitions.json
+**/ios/Runner/GeneratedPluginRegistrant.*
+
+# Coverage
+coverage/
+
+# Submodules
+packages/**/pubspec.lock
+
+# Web related
+lib/generated_plugin_registrant.dart
 
 # Symbolication related
 app.*.symbols
@@ -37,62 +98,16 @@ app.*.symbols
 # Obfuscation related
 app.*.map.json
 
-# Android Studio will place build artifacts here
-/android/app/debug
-/android/app/profile
-/android/app/release
-linux/.gitignore
-linux/CMakeLists.txt
-linux/main.cc
-linux/my_application.cc
-linux/my_application.h
-linux/flutter/CMakeLists.txt
-linux/flutter/generated_plugin_registrant.cc
-linux/flutter/generated_plugin_registrant.h
-linux/flutter/generated_plugins.cmake
-macos/.gitignore
-macos/Flutter/Flutter-Debug.xcconfig
-macos/Flutter/Flutter-Release.xcconfig
-macos/Flutter/GeneratedPluginRegistrant.swift
-macos/Runner/AppDelegate.swift
-macos/Runner/DebugProfile.entitlements
-macos/Runner/Info.plist
-macos/Runner/MainFlutterWindow.swift
-macos/Runner/Release.entitlements
-macos/Runner/Assets.xcassets/AppIcon.appiconset/app_icon_16.png
-macos/Runner/Assets.xcassets/AppIcon.appiconset/app_icon_32.png
-macos/Runner/Assets.xcassets/AppIcon.appiconset/app_icon_64.png
-macos/Runner/Assets.xcassets/AppIcon.appiconset/app_icon_128.png
-macos/Runner/Assets.xcassets/AppIcon.appiconset/app_icon_256.png
-macos/Runner/Assets.xcassets/AppIcon.appiconset/app_icon_512.png
-macos/Runner/Assets.xcassets/AppIcon.appiconset/app_icon_1024.png
-macos/Runner/Assets.xcassets/AppIcon.appiconset/Contents.json
-macos/Runner/Base.lproj/MainMenu.xib
-macos/Runner/Configs/AppInfo.xcconfig
-macos/Runner/Configs/Debug.xcconfig
-macos/Runner/Configs/Release.xcconfig
-macos/Runner/Configs/Warnings.xcconfig
-macos/Runner.xcodeproj/project.pbxproj
-macos/Runner.xcodeproj/project.xcworkspace/xcshareddata/IDEWorkspaceChecks.plist
-macos/Runner.xcodeproj/xcshareddata/xcschemes/Runner.xcscheme
-macos/Runner.xcworkspace/contents.xcworkspacedata
-macos/Runner.xcworkspace/xcshareddata/IDEWorkspaceChecks.plist
-macos/RunnerTests/RunnerTests.swift
-windows/.gitignore
-windows/CMakeLists.txt
-windows/flutter/CMakeLists.txt
-windows/flutter/generated_plugin_registrant.cc
-windows/flutter/generated_plugin_registrant.h
-windows/flutter/generated_plugins.cmake
-windows/runner/CMakeLists.txt
-windows/runner/flutter_window.cpp
-windows/runner/flutter_window.h
-windows/runner/main.cpp
-windows/runner/resource.h
-windows/runner/runner.exe.manifest
-windows/runner/Runner.rc
-windows/runner/utils.cpp
-windows/runner/utils.h
-windows/runner/win32_window.cpp
-windows/runner/win32_window.h
-windows/runner/resources/app_icon.ico
+# Exceptions to the above rules.
+!**/ios/**/default.mode1v3
+!**/ios/**/default.mode2v3
+!**/ios/**/default.pbxuser
+!**/ios/**/default.perspectivev3
+!/packages/flutter_tools/test/data/dart_dependencies_test/**/.packages
+!/dev/ci/**/Gemfile.lock
+!.vscode/extensions.json
+!.vscode/launch.json
+!.idea/codeStyles/
+!.idea/dictionaries/
+!.idea/runConfigurations/
+/lib/#main_development.dart#
