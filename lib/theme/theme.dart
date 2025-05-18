@@ -23,7 +23,8 @@ class NotesTheme {
 
   static ThemeData get dark {
     final theme = ThemeData(
-      colorScheme: colorScheme.copyWith(
+      colorScheme: ColorScheme.fromSeed(
+        seedColor: const Color(0xFF9E6C00),
         brightness: Brightness.dark,
       ),
       iconTheme: iconThemeData,

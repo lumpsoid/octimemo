@@ -33,6 +33,7 @@ class DatePickerButton extends StatelessWidget {
             dateSelected ? Icons.event_busy : Icons.calendar_month;
 
         return IconButton(
+          color: ColorScheme.of(context).onSurfaceVariant,
           icon: Icon(buttonIcon),
           padding: const EdgeInsets.fromLTRB(8, 0, 20, 0),
           onPressed: onTap,
