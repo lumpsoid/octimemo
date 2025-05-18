@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:developer';
 import 'dart:io';
 import 'dart:typed_data';
 
@@ -26,7 +25,7 @@ class NoteSqfliteApi {
   /// {@macro local_sqflite_api}
   NoteSqfliteApi();
 
-  static const String notes_table = 'notes';
+  static const String notesTable = 'notes';
   late final Database _db;
   final _notes = BehaviorSubject.seeded(IList(const <Note>[]));
 
@@ -39,11 +38,13 @@ class NoteSqfliteApi {
 
   Task<void> fetchNotes() => Task(() async {
         final notes = await _db.query('notes');
-        _notes.add(notes
-            .map(
-              (note) => Note.fromDb(note),
-            )
-            .toIList());
+        _notes.add(
+          notes
+              .map(
+                Note.fromDb,
+              )
+              .toIList(),
+        );
       });
 
   Task<void> insertNote(
@@ -52,7 +53,7 @@ class NoteSqfliteApi {
       Task(() async {
         _db.insert(
           'notes',
-          note.ToDb(),
+          note.toDb(),
         );
         _notes.add(_notes.value.add(note));
       });
@@ -64,7 +65,7 @@ class NoteSqfliteApi {
         await _db.transaction(
           (txn) async {
             for (final note in notes) {
-              txn.insert('notes', note.ToDb());
+              txn.insert('notes', note.toDb());
             }
           },
         );
@@ -74,15 +75,17 @@ class NoteSqfliteApi {
   Task<void> updateNote(Note note) => Task(() async {
         _db.update(
           'notes',
-          note.ToDb(),
+          note.toDb(),
           where: 'id = ?',
           whereArgs: [note.id],
         );
-        _notes.add(_notes.value
-            .map(
-              (n) => n.id == note.id ? note : n,
-            )
-            .toIList());
+        _notes.add(
+          _notes.value
+              .map(
+                (n) => n.id == note.id ? note : n,
+              )
+              .toIList(),
+        );
       });
 
   Task<void> deleteNote(int noteId) => Task(() async {
@@ -132,9 +135,8 @@ class NoteSqfliteApi {
         final fileContent = await File(filePath).readAsString();
         final jsonObject = jsonDecode(fileContent);
         final notesList = jsonObject['notes'] as List<dynamic>;
-        final notes = notesList
-            .map((item) => Note.fromJson(jsonDecode(item)))
-            .toList();
+        final notes =
+            notesList.map((item) => Note.fromJson(jsonDecode(item))).toList();
         final notesOnlyNew = notes
             .difference(
               Eq.eqInt.contramap<Note>((n) => n.id),
@@ -175,42 +177,44 @@ class NoteSqfliteApi {
     await generateExampleNotes(db).run();
   }
 
-  Task<void> generateExampleNotes(Database db) => Task(() async {
-        await db.insert(
-          'notes',
-          Note.fromBody(
-            'text input field at the bottom will be always there for you',
-          ).ToDb(),
-        );
-        await db.insert(
-          'notes',
-          Note.fromBody(
-            'to delete this note, try to long tap on this note to see additional actions',
-          ).ToDb(),
-        );
-        await db.insert(
-          'notes',
-          Note.fromBody(
-            'to edit this note, try to tap on this note',
-          ).ToDb(),
-        );
-        await db.insert(
-          'notes',
-          Note.fromBody(
-            'also you can use search button to filter notes',
-          ).ToDb(),
-        );
-        await db.insert(
-          'notes',
-          Note.fromBody(
-            'and use callendar button to filter notes by date, this two buttons can be used together',
-          ).ToDb(),
-        );
-        await db.insert(
-          'notes',
-          Note.fromBody(
-            'and you good to go',
-          ).ToDb(),
-        );
-      });
+  Task<void> generateExampleNotes(Database db) => Task(
+        () async {
+          await db.insert(
+            'notes',
+            Note.fromBody(
+              'text input field at the bottom will be always there for you',
+            ).toDb(),
+          );
+          await db.insert(
+            'notes',
+            Note.fromBody(
+              'to delete this note, try to long tap on this note to see additional actions',
+            ).toDb(),
+          );
+          await db.insert(
+            'notes',
+            Note.fromBody(
+              'to edit this note, try to tap on this note',
+            ).toDb(),
+          );
+          await db.insert(
+            'notes',
+            Note.fromBody(
+              'also you can use search button to filter notes',
+            ).toDb(),
+          );
+          await db.insert(
+            'notes',
+            Note.fromBody(
+              'and use callendar button to filter notes by date, this two buttons can be used together',
+            ).toDb(),
+          );
+          await db.insert(
+            'notes',
+            Note.fromBody(
+              'and you good to go',
+            ).toDb(),
+          );
+        },
+      );
 }

@@ -1,22 +1,34 @@
 import 'package:flutter/material.dart';
 
 class NotesTheme {
+  const NotesTheme();
+
+  static ColorScheme colorScheme = ColorScheme.fromSeed(
+    seedColor: const Color(0xFF9E6C00),
+  );
+
+  static IconThemeData iconThemeData = IconThemeData(
+    size: 28,
+    color: colorScheme.onSurfaceVariant,
+  );
+
   static ThemeData get light {
-    return ThemeData(
-      colorScheme: ColorScheme.fromSeed(
-        seedColor: const Color(0xFF9E6C00),
-      ),
-      iconTheme: IconThemeData(size: 28),
+    final theme = ThemeData(
+      colorScheme: colorScheme,
+      iconTheme: iconThemeData,
     );
+
+    return theme;
   }
 
   static ThemeData get dark {
-    return ThemeData(
-      colorScheme: ColorScheme.fromSeed(
+    final theme = ThemeData(
+      colorScheme: colorScheme.copyWith(
         brightness: Brightness.dark,
-        seedColor: const Color(0xFF9E6C00),
       ),
-      iconTheme: IconThemeData(size: 28),
+      iconTheme: iconThemeData,
     );
+
+    return theme;
   }
 }

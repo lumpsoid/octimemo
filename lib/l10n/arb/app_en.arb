@@ -1,5 +1,30 @@
 {
     "@@locale": "en",
+     "overviewInputSearchHint": "Search notes...",
+    "@overviewInputSearchHint": {
+      "description": "Hint text displayed in the search input field"
+    },
+    
+    "overviewOptionsMenuLabel": "Options",
+    "@overviewOptionsMenuLabel": {
+      "description": "Label for the options menu button"
+    },
+    
+    "overviewDatePickerLabel": "Filter by date",
+    "@overviewDatePickerLabel": {
+      "description": "Label for the date picker button"
+    },
+    
+    "search": "Search",
+    "@search": {
+      "description": "Label for search action"
+    },
+    
+    "close": "Close",
+    "@close": {
+      "description": "Label for close action"
+    },
+    "overviewNotificationNoteCopied": "Note text copied to the clipboard",
     "overviewNotificationDeleteText": "Note was deleted",
     "overviewNotificationDeleteUndoButton": "Undo",
     "overviewInputSearchHint": "Search",

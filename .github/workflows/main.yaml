@@ -1,4 +1,4 @@
-name: test_to_get_github
+name: octimemo
 
 concurrency:
   group: $-$

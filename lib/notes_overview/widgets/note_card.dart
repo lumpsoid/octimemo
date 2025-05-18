@@ -1,8 +1,9 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
-import 'package:octimemo/notes_overview/bloc/notes_overview_bloc.dart';
-import 'package:octimemo/notes_overview/notes_overview.dart';
 import 'package:note_sqflite_api/note_sqflite_api.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:octimemo/notes_overview/notes_overview.dart';
+import 'package:octimemo/service_locator/service_locator.dart';
 
 class NoteCard extends StatelessWidget {
   const NoteCard({required this.note, super.key});
@@ -11,23 +12,24 @@ class NoteCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final viewModel = getIt<NotesOverviewViewModel>();
+
     return Padding(
-      padding: const EdgeInsets.all(10.0),
+      padding: const EdgeInsets.symmetric(vertical: 10),
       child: Dismissible(
-        resizeDuration: const Duration(microseconds: 1),
-        // drag to the right (edit)
+        key: Key(note.id.toString()),
+        resizeDuration: const Duration(milliseconds: 200),
         background: Container(
           alignment: Alignment.centerLeft,
-          padding: const EdgeInsets.only(left: 15.0),
+          padding: const EdgeInsets.only(left: 15),
           child: const Icon(
             Icons.edit_outlined,
             color: Colors.green,
           ),
         ),
-        // drag to the left (delete)
         secondaryBackground: Container(
           alignment: Alignment.centerRight,
-          padding: const EdgeInsets.only(right: 15.0),
+          padding: const EdgeInsets.only(right: 15),
           child: const Icon(
             Icons.delete_outline,
             color: Colors.red,
@@ -36,9 +38,12 @@ class NoteCard extends StatelessWidget {
         confirmDismiss: (DismissDirection direction) async {
           // edit
           if (direction == DismissDirection.startToEnd) {
-            context.read<NotesOverviewBloc>().add(
-                  NotesOverviewNoteEdit(note),
-                );
+            unawaited(
+              viewModel.startEditing(
+                note.id,
+                note.body,
+              ),
+            );
             return false;
           }
           // delete
@@ -53,31 +58,32 @@ class NoteCard extends StatelessWidget {
           // }
           // delete
           if (direction == DismissDirection.endToStart) {
-            context.read<NotesOverviewBloc>().add(
-                  NotesOverviewNoteDelete(note.id),
-                );
+            unawaited(viewModel.deleteNote(note.id));
           }
         },
-        key: Key(note.id.toString()),
         child: InkWell(
-          onLongPress: () => context.read<NotesOverviewBloc>().add(
-                NotesOverviewToClipboard(note.body),
-              ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                note.getDateCreatedFormatted(),
-                style: const TextStyle(
-                  fontSize: 12.0,
-                  color: Colors.grey,
+          borderRadius: BorderRadius.circular(3),
+          overlayColor: WidgetStateProperty.all(
+            Theme.of(context).colorScheme.surfaceContainerHighest.withAlpha(40),
+          ),
+          onLongPress: () => viewModel.copyToClipboard(note.body),
+          child: SizedBox(
+            width: double.infinity,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  note.getDateCreatedFormatted(),
+                  style: TextTheme.of(context).bodySmall!.copyWith(
+                        color: ColorScheme.of(context).secondary,
+                      ),
                 ),
-              ),
-              Text(
-                note.body,
-                style: const TextStyle(fontSize: 16.0),
-              ),
-            ],
+                Text(
+                  note.body,
+                  style: TextTheme.of(context).bodyLarge,
+                ),
+              ],
+            ),
           ),
         ),
       ),

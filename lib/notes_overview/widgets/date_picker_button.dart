@@ -1,27 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:octimemo/notes_overview/notes_overview.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:octimemo/service_locator/service_locator.dart';
 
 class DatePickerButton extends StatelessWidget {
   const DatePickerButton({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<NotesOverviewBloc, NotesOverviewState>(
-        builder: (context, state) {
-      return state.datePicked != 0
-          ? IconButton(
-              onPressed: () => context.read<NotesOverviewBloc>().add(
-                    const NotesOverviewDatePickEnd(),
-                  ),
-              icon: const Icon(Icons.event_busy),
-            )
-          : IconButton(
-              icon: const Icon(
-                Icons.calendar_month,
-              ),
-              padding: const EdgeInsets.fromLTRB(8.0, 0.0, 20.0, 0.0),
-              onPressed: () async {
+    final viewModel = getIt<NotesOverviewViewModel>();
+    return ValueListenableBuilder(
+      valueListenable: viewModel.filters,
+      builder: (context, filters, _) {
+        final dateSelected = filters.containsKey(DateFilter);
+
+        final onTap = dateSelected
+            ? viewModel.clearDate
+            : () async {
                 final dateNow = DateTime.now();
                 final datePicked = await showDatePicker(
                   context: context,
@@ -32,11 +26,18 @@ class DatePickerButton extends StatelessWidget {
                 if (datePicked == null) {
                   return;
                 }
-                context
-                    .read<NotesOverviewBloc>()
-                    .add(NotesOverviewDatePick(datePicked));
-              },
-            );
-    });
+                viewModel.selectDate(datePicked);
+              };
+
+        final buttonIcon =
+            dateSelected ? Icons.event_busy : Icons.calendar_month;
+
+        return IconButton(
+          icon: Icon(buttonIcon),
+          padding: const EdgeInsets.fromLTRB(8, 0, 20, 0),
+          onPressed: onTap,
+        );
+      },
+    );
   }
 }

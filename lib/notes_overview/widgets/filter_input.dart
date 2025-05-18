@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:octimemo/l10n/l10n.dart';
 import 'package:octimemo/notes_overview/notes_overview.dart';
+import 'package:octimemo/service_locator/service_locator.dart';
 
 class FilterInput extends StatelessWidget {
   const FilterInput({super.key});
@@ -9,33 +9,26 @@ class FilterInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
+    final viewModel = getIt<NotesOverviewViewModel>();
 
-    return BlocBuilder<NotesOverviewBloc, NotesOverviewState>(
-      builder: (context, state) {
-        return Row(
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: InkWell(
-                onTap: () => context.read<NotesOverviewBloc>().add(
-                      const NotesOverviewSearchEnd(),
-                    ),
-                child: const Icon(Icons.search_off),
-              ),
+    return Row(
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: InkWell(
+            onTap: viewModel.clearQuery,
+            child: const Icon(Icons.search_off),
+          ),
+        ),
+        Expanded(
+          child: TextField(
+            onChanged: viewModel.changeQuery,
+            decoration: InputDecoration(
+              hintText: l10n.overviewInputSearchHint,
             ),
-            Expanded(
-              child: TextField(
-                onChanged: (value) => context.read<NotesOverviewBloc>().add(
-                      NotesOverviewSearchQuery(value),
-                    ),
-                decoration: InputDecoration(
-                  hintText: l10n.overviewInputSearchHint,
-                ),
-              ),
-            ),
-          ],
-        );
-      },
+          ),
+        ),
+      ],
     );
   }
 }

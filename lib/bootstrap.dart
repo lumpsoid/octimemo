@@ -1,28 +1,21 @@
 import 'dart:async';
-import 'dart:developer';
 
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:note_sqflite_api/note_sqflite_api.dart';
-import 'package:octimemo/app/app.dart';
-import 'package:octimemo/app/app_bloc_observer.dart';
-import 'package:notes_repository/notes_repository.dart';
+import 'package:flutter/widgets.dart';
+import 'package:logging/logging.dart';
 
-void bootstrap({
-  required NoteSqfliteApi localApi,
-}) {
+Future<void> bootstrap(
+  FutureOr<Widget> Function() builder,
+  Logger logger,
+) async {
   FlutterError.onError = (details) {
-    log(details.exceptionAsString(), stackTrace: details.stack);
+    logger.severe(
+      'Runtime error',
+      details.exception,
+      details.stack,
+    );
   };
 
-  Bloc.observer = const AppBlocObserver();
+  // Add cross-flavor configuration here
 
-  final notesRepository = NotesRepository(localApi: localApi);
-
-  runZonedGuarded(
-    () => runApp(App(
-      notesRepository: notesRepository,
-    )),
-    (error, stackTrace) => log(error.toString(), stackTrace: stackTrace),
-  );
+  runApp(await builder());
 }

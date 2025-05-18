@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:equatable/equatable.dart';
-import 'package:flutter/rendering.dart';
 
 class Note extends Equatable {
   const Note({
@@ -10,10 +9,6 @@ class Note extends Equatable {
     required this.dateCreated,
     required this.dateModified,
   });
-
-  static int newId() {
-    return DateTime.now().microsecondsSinceEpoch;
-  }
 
   const Note.empty()
       : this(
@@ -41,11 +36,15 @@ class Note extends Equatable {
   // Create a Note instance from a JSON string
   factory Note.fromJson(Map<String, dynamic> noteJson) {
     return Note(
-      id: noteJson['id'],
-      body: noteJson['body'],
-      dateCreated: noteJson['dateCreated'],
-      dateModified: noteJson['dateModified'],
+      id: noteJson['id'] as int,
+      body: noteJson['body'] as String,
+      dateCreated: noteJson['dateCreated'] as int,
+      dateModified: noteJson['dateModified'] as int,
     );
+  }
+
+  static int newId() {
+    return DateTime.now().microsecondsSinceEpoch;
   }
 
   /// The unique identifier for the book.
@@ -65,7 +64,7 @@ class Note extends Equatable {
 
   bool get isEmpty => id == 0;
 
-  Map<String, dynamic> ToDb() {
+  Map<String, dynamic> toDb() {
     return {
       'id': id,
       'body': body,

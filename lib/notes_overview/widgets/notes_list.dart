@@ -1,9 +1,10 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:notes_repository/notes_repository.dart';
+import 'package:octimemo/common/composed_builder.dart';
 import 'package:octimemo/l10n/l10n.dart';
 import 'package:octimemo/notes_overview/notes_overview.dart';
+import 'package:octimemo/service_locator/service_locator.dart';
 
 class NotesList extends StatelessWidget {
   const NotesList({super.key});
@@ -11,38 +12,39 @@ class NotesList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
+    final viewModel = getIt<NotesOverviewViewModel>();
 
-    return BlocBuilder<NotesOverviewBloc, NotesOverviewState>(
-      builder: (context, state) {
-        IList<Note> notes;
-
-        if (state.searchStatus || state.datePicked != 0) {
-          notes = state.filteredNotes;
+    return ComposedBuilder2<IList<Note>, IMap<Type, NoteFilter>, IList<Note>>(
+      first: viewModel.notes,
+      second: viewModel.filters,
+      composer: (notes, filters) {
+        if (filters.isNotEmpty) {
+          return viewModel.getFilteredNotes();
         } else {
-          notes = state.notes;
+          return notes;
         }
-
-        if (notes.isEmpty) {
+      },
+      builder: (context, composedNotes, _) {
+        if (composedNotes.isEmpty) {
           return Center(
             child: Text(
               l10n.overviewNoNotesText,
             ),
           );
         }
+        final height = MediaQuery.sizeOf(context).height;
 
-        final height = MediaQuery.of(context).size.height;
         return CustomScrollView(
           reverse: true,
           slivers: [
             SliverList(
               delegate: SliverChildBuilderDelegate(
                 (context, index) {
-                  final reversedIndex = notes.length - 1 - index;
                   return NoteCard(
-                    note: notes[reversedIndex],
+                    note: viewModel.getNoteReversed(index),
                   );
                 },
-                childCount: notes.length,
+                childCount: composedNotes.length,
               ),
             ),
             SliverToBoxAdapter(

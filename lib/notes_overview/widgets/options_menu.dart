@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:octimemo/l10n/l10n.dart';
-import 'package:octimemo/notes_overview/bloc/notes_overview_bloc.dart';
+import 'package:octimemo/notes_overview/notes_overview.dart';
+import 'package:octimemo/service_locator/service_locator.dart';
 
 class OptionsMenu extends StatelessWidget {
   const OptionsMenu({super.key});
@@ -9,6 +9,7 @@ class OptionsMenu extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
+    final viewModel = getIt<NotesOverviewViewModel>();
 
     return PopupMenuButton<String>(
       icon: const Icon(Icons.menu),
@@ -16,21 +17,13 @@ class OptionsMenu extends StatelessWidget {
         return [
           PopupMenuItem<String>(
             value: 'import',
+            onTap: viewModel.importNotes,
             child: Text(l10n.overviewImportOptionText),
-            onTap: () {
-              context.read<NotesOverviewBloc>().add(
-                    const NotesOverviewImport(),
-                  );
-            },
           ),
           PopupMenuItem<String>(
             value: 'export',
+            onTap: viewModel.exportNotes,
             child: Text(l10n.overviewExportOptionText),
-            onTap: () {
-              context.read<NotesOverviewBloc>().add(
-                    const NotesOverviewExport(),
-                  );
-            },
           ),
         ];
       },

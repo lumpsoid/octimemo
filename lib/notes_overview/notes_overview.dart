@@ -1,4 +1,4 @@
-export 'bloc/notes_overview_bloc.dart';
-export 'view/view.dart';
-export 'widgets/widgets.dart';
 export 'models/models.dart';
+export 'view/view.dart';
+export 'view_model/view_model.dart';
+export 'widgets/widgets.dart';
