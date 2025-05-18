@@ -113,3 +113,4 @@ app.*.map.json
 
 *~
 *#
+android/app/.cxx
