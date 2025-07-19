@@ -24,7 +24,8 @@ class AppLocalizationsFr extends AppLocalizations {
   String get close => 'Close';
 
   @override
-  String get overviewNotificationNoteCopied => 'Note text copied to the clipboard';
+  String get overviewNotificationNoteCopied =>
+      'Note text copied to the clipboard';
 
   @override
   String get overviewNotificationDeleteText => 'La note a été supprimée';

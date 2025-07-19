@@ -24,7 +24,8 @@ class AppLocalizationsSr extends AppLocalizations {
   String get close => 'Close';
 
   @override
-  String get overviewNotificationNoteCopied => 'Note text copied to the clipboard';
+  String get overviewNotificationNoteCopied =>
+      'Note text copied to the clipboard';
 
   @override
   String get overviewNotificationDeleteText => 'Beleška je obrisana';
